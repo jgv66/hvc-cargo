@@ -1,0 +1,7 @@
+{
+  "name": "HVCcargo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
