@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-buttons slot="start">
+                <ion-menu-button autoHide="false"></ion-menu-button>
+            </ion-buttons>
+        </ion-buttons>
+        <ion-title>Acceso a mi Mandala</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card class="welcome-card">
+
+        <img src="assets/images/signup.jpg" alt="x1">
+
+        <ion-card-header style="padding: 10px 10px 10px 6px;">
+            <ion-card-title class="ion-text-center">Cambiar mi clave...</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="padding-top: 1px; text-align: justify; padding-left: 10px; padding-right: 10px;">
+            <ion-list lines="none">
+                <ion-item>
+                    <ion-label position="stacked">Mi rut completo (con guión y dígito)</ion-label>
+                    <ion-input autocomplete="off" type="text" name="miRut" [(ngModel)]="miRut"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Mi clave actual</ion-label>
+                    <ion-input autocomplete="off" type="password" name="miClaveActual" [(ngModel)]="miClaveActual"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked" style="max-width: 80%;">Nueva clave (mínimo 6 caracteres)</ion-label>
+                    <ion-icon [name]="(passwordType === 'text')?'eye-off-outline':'eye-outline'" color="tertiary" slot="end" (click)="togglePasswordMode()" style="position: absolute; left: 250px;"></ion-icon>
+                    <ion-input autocomplete="off" [type]="passwordType" name="miClave1" [(ngModel)]="miClave1"></ion-input>
+                </ion-item>
+            </ion-list>
+            <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+            <ion-button style="font-size: 80%;margin-top: 15px;padding-top: 10px;" expand="block" share="round" color="mango" (click)="registrar()">Registrar este cambio en mi Mandala</ion-button>
+
+        </ion-card-content>
+
+    </ion-card>
+
+</ion-content>

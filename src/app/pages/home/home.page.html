@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <!--  -->
+        <ion-buttons slot="start" *ngIf=" datos.logeado ">
+            <ion-button (click)="menuToggle()">
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">{{ datos.logeado ? datos?.nombreemp : 'Inicio' }}</ion-title>
+        <!--  -->
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card class="welcome-card" style="margin-top: 10px;">
+        <img src="assets/images/rrhh1.jpg" alt="imagen inicial">
+        <ion-card-header style="padding-top: 10px;padding-bottom: 10px;">
+            <ion-card-title class="ion-text-center" style="font-size: 150%;">Bienvenido a HVC-Cargo</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 5px; text-align: justify; font-size: 70% !important; padding-bottom: 5px;">
+            <p>HVC-Cargo, te ayudará a trabajar en la recepción, transporte y entrega de nuestros despachos y encomiendas. Los datos que requieras saber tanto de la recepción, los clientes, los despachos, las entregas y productos que trasladas está aquí.</p>
+            <ion-row style="font-size: 70%;margin-top: 10px;">
+                <ion-col size="12" *ngIf=" !datos.logeado ">
+                    <ion-button (click)="ingresar()" color="primary" expand="block" fill="outline" size="small">Ingresar a HVC-Cargo</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+
+        <img style="margin-bottom: 25px; margin-top:20px;" class="img kntk" src="assets/images/logo-kinetik.png" alt="mi_logo">
+
+    </ion-card>
+
+</ion-content>

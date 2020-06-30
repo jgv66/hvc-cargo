@@ -1,0 +1,80 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>{{ item.cli_razon }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card class="welcome-card">
+        <img src="assets/images/revisaretiro.jpg" alt="x1">
+
+        <ion-card-header>
+            <ion-card-title class="ion-text-center">Datos del Cliente</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="padding-top: 5px; text-align: justify;">
+            <ion-grid fixed style="text-align: justify;">
+                <ion-row>
+                    <ion-col size="3">Cliente : </ion-col>
+                    <ion-col size="9">{{ item?.cli_razon }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Rut : </ion-col>
+                    <ion-col size="9">{{ item?.cli_rut }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Dirección : </ion-col>
+                    <ion-col size="9">{{ item?.cli_direccion }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Comuna : </ion-col>
+                    <ion-col size="9">{{ item?.cli_comuna }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Ciudad : </ion-col>
+                    <ion-col size="9">{{ item?.cli_ciudad }}</ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="welcome-card">
+        <img src="assets/images/revisaretiro2.jpg" alt="x1">
+
+        <ion-card-header>
+            <ion-card-title class="ion-text-center">Datos del Destinatario</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="padding-top: 5px; text-align: justify;">
+            <ion-grid fixed style="font-size: 78%;text-align: justify;">
+                <ion-row>
+                    <ion-col size="3">Destino : </ion-col>
+                    <ion-col size="9">{{ item?.des_razon }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Rut : </ion-col>
+                    <ion-col size="9">{{ item?.des_rut }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Dirección : </ion-col>
+                    <ion-col size="9">{{ item?.des_direccion }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Comuna : </ion-col>
+                    <ion-col size="9">{{ item?.des_comuna }}</ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="3">Ciudad : </ion-col>
+                    <ion-col size="9">{{ item?.des_ciudad }}</ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

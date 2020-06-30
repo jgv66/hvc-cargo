@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'folder/Inbox',
-    pathMatch: 'full'
-  },
-  {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  }
+const routes: Routes =
+[
+  { path: '',  redirectTo: 'home', pathMatch: 'full'  },
+  { path: 'home',           loadChildren: () => import('./pages/home/home.module')                          .then(m => m.HomePageModule          ) },
+  { path: 'login',          loadChildren: () => import('./pages/login/login.module')                        .then(m => m.LoginPageModule         ) },
+  { path: 'logout',         loadChildren: () => import('./pages/logout/logout.module')                      .then(m => m.LogoutPageModule        ) },
+  { path: 'pikear',         loadChildren: () => import('./pages/recibirencomienda/recibirencomienda.module').then( m => m.RecibirencomiendaPageModule) },
+  { path: 'acopiar',        loadChildren: () => import('./pages/acopiar/acopiar.module')                    .then( m => m.AcopiarPageModule      ) },
+  { path: 'cambioclave',    loadChildren: () => import('./pages/signup/signup.module')                      .then(m => m.SignupPageModule        ) },
+  { path: 'meolvide',       loadChildren: () => import('./pages/meolvide/meolvide.module')                  .then( m => m.MeolvidePageModule     ) },
+ // { path: 'temas',          loadChildren: () => import('./pages/temas/temas.module')              .then(m => m.TemasPageModule         ) },
+  { path: '**',             redirectTo: 'home', pathMatch: 'full' },
 ];
 
 @NgModule({

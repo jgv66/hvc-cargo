@@ -1,0 +1,26 @@
+// .clave {
+//     --border-color: var(--ion-color-danger, #f1453d) !important;
+// }
+// .item-has-focus {
+//     --highlight-background: #a4cce7;
+// }
+.ios {
+    .item-has-focus.ion-invalid {
+        --border-color: var(--ion-color-danger, #f1453d);
+    }
+    .ion-valid {
+        --border-color: var( --ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(255, 255, 255, 0.8))));
+    }
+    .custom-item {
+        --background: transparent;
+        color: #fff !important;
+        --background-focused: transparent;
+    }
+}
+
+.md.custom-item {
+    --background: transparent;
+    color: #fff !important;
+    --background-focused: transparent;
+    --border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(255, 255, 255, 0.8))));
+}

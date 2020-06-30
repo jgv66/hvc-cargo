@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <!-- <ion-button *ngIf=" logeado " (click)="menuToggle()"><ion-icon slot="icon-only" name="menu"></ion-icon></ion-button> -->
+            <ion-button (click)="volver()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Acceso Principal</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card class="welcome-card">
+
+        <img src="assets/images/login.jpg" alt="imagen del login">
+
+        <ion-card-header>
+            <ion-card-title class="ion-text-center" style="font-size:150%;">Ingresar a HVC-Cargo</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="padding-top: 5px; text-align: justify;">
+            <ion-list>
+                <ion-item>
+                    <ion-label position="stacked">Email</ion-label>
+                    <ion-input autocomplete="off" type="text" name="miEmail" [(ngModel)]="miEmail"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Password</ion-label>
+                    <ion-input autocomplete="off" type="password" name="miClave" [(ngModel)]="miClave"></ion-input>
+                </ion-item>
+
+                <ion-button style="font-size: 80%;margin-top: 40px;" expand="block" size="small" share="round" color="primary" fill="outline" (click)="login()">Validar estos datos e ingresar</ion-button>
+
+            </ion-list>
+            <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+            <!-- 
+            <ion-row style="font-size: 60%;margin-top: 10px;">
+                <ion-col size="6" offset="3">
+                    <ion-button (click)="iforgot()" fill="clear" size="small">No recuerdo mi clave</ion-button>
+                </ion-col>
+            </ion-row>
+ -->
+        </ion-card-content>
+
+    </ion-card>
+
+</ion-content>

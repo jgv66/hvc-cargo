@@ -1,0 +1,46 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Oops...</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="animated fadeIn">
+
+    <ion-card class="ion-no-padding animated fadeIn">
+
+        <img src="assets/images/meolvide.jpg" alt="x1">
+
+        <ion-card-header style="padding-top: 10px; padding-bottom: 5px;">
+            <ion-card-title class="ion-text-center">Olvidé mi clave</ion-card-title>
+        </ion-card-header>
+
+        <p class="texto">Esta solictud será dirigida a Recursos Humanos de la empresa. Luego de verificar sus datos, le será enviada su clave actual al correo o teléfono proporcionados para que pueda ingresar nuevamente a la App. Una vez recibida, le sugerimos ingresar
+            al sistema e ir al Menú de 'Mis cambios', opción 'Cambiar de clave' y modificar la clave actual. Sea cuidadoso con estos datos.</p>
+
+        <ion-card-content style="padding-top: 1px; text-align: justify; padding-left: 10px; padding-right: 10px; ">
+            <ion-list lines="none ">
+                <ion-item>
+                    <ion-label position="stacked ">Mi rut completo (con guión y dígito)</ion-label>
+                    <ion-input autocomplete="off " type="text " name="miRut " [(ngModel)]="miRut "></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked ">Mi email</ion-label>
+                    <ion-input autocomplete="off " type="text " name="miCorreo " [(ngModel)]="miCorreo "></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked ">Mi número de celular</ion-label>
+                    <ion-input autocomplete="off " type="text " name="miTelefono " [(ngModel)]="miTelefono "></ion-input>
+                </ion-item>
+            </ion-list>
+            <ion-progress-bar *ngIf=" solicitando " type="indeterminate "></ion-progress-bar>
+
+            <ion-button style="font-size: 80%;margin-top: 15px;padding-top: 10px; " expand="block " share="round " color="mango " (click)="validar() ">Enviar mi solicitud</ion-button>
+
+        </ion-card-content>
+
+    </ion-card>
+
+</ion-content>
