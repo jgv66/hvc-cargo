@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-revisarretiro',
@@ -10,7 +10,8 @@ export class RevisarretiroPage implements OnInit {
 
   @Input() item;
 
-  constructor( private modalCtrl: ModalController ) { }
+  constructor( private modalCtrl: ModalController,
+               private alertCtrl: AlertController ) { }
 
   ngOnInit() {}
 
@@ -18,6 +19,28 @@ export class RevisarretiroPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  async retirar() {
+    const alert = await this.alertCtrl.create({
+      header: 'Yo voy a retirarla...',
+      message: 'Al aceptar esta opción, el sistema iniciará el tracking del despacho y le asignará este retiro de encomienda.<br><br><strong>Está seguro ?</strong>',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Sí, yo voy',
+          handler: () => { this.pickup(); }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
+  pickup() {
+    this.modalCtrl.dismiss({ retirar: true });
+  }
 
 }

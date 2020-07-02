@@ -14,23 +14,25 @@ export class MenuComponent implements OnInit {
     {
       title: 'Encomiendas',
       children: [
-        { title: 'Pendientes de retiro', url: '/pikear',  icon: 'gift-outline' },
-        { title: 'Entrega en acopio',    url: '/acopiar', icon: 'business-outline'   },
+        { title: 'Pendientes de retiro',   url: '/pikear',   icon: 'gift-outline'      },
+        { title: 'Mis retiros pendientes', url: '/ordenpik', icon: 'analytics-outline' },
+        { title: 'Entrega en acopio',      url: '/acopiar',  icon: 'business-outline'  },
       ]
     },
     {
       title: 'Ordenes de Transporte',
       children: [
-        { title: 'Pendientes de Recibir',  url: '/otpendientes', icon: 'lock-open-outline' },
-        { title: 'Aceptadas',              url: '/otaceptadas',  icon: 'checkmark-circle-outline'   },
-        { title: 'Cerradas',               url: '/otcerradas',   icon: 'lock-closed-outline'   },
+        { title: 'Pendientes de Recibir',  url: '/otpendientes', icon: 'lock-open-outline'        },
+        { title: 'Aceptadas',              url: '/otaceptadas',  icon: 'checkmark-circle-outline' },
+        { title: 'Dar por cerrada OT',     url: '/cerrarot',     icon: 'ribbon-outline'           },
+        { title: 'Cerradas',               url: '/otcerradas',   icon: 'lock-closed-outline'      },
       ]
     },
     {
       title: 'Entregas',
       children: [
-        { title: 'Encomienda',          url: '/entregar',   icon: 'location-outline' },
-        { title: 'Dar por cerrada OT',  url: '/cerrarot',   icon: 'ribbon-outline' },
+        { title: 'Encomienda',  url: '/entregar', icon: 'location-outline'     },
+        { title: 'Rechazos',    url: '/rechazos', icon: 'thunderstorm-outline' },
       ]
     },
     { title: 'Cerrar sesión', url: '/logout', icon: 'exit-outline',  caso: 2 }

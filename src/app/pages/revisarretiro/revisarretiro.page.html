@@ -5,76 +5,77 @@
                 <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>{{ item.cli_razon }}</ion-title>
+        <ion-title>Retiro Pendiente</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
     <ion-card class="welcome-card">
-        <img src="assets/images/revisaretiro.jpg" alt="x1">
-
-        <ion-card-header>
-            <ion-card-title class="ion-text-center">Datos del Cliente</ion-card-title>
-        </ion-card-header>
-
-        <ion-card-content style="padding-top: 5px; text-align: justify;">
-            <ion-grid fixed style="text-align: justify;">
-                <ion-row>
-                    <ion-col size="3">Cliente : </ion-col>
-                    <ion-col size="9">{{ item?.cli_razon }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Rut : </ion-col>
-                    <ion-col size="9">{{ item?.cli_rut }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Dirección : </ion-col>
-                    <ion-col size="9">{{ item?.cli_direccion }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Comuna : </ion-col>
-                    <ion-col size="9">{{ item?.cli_comuna }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Ciudad : </ion-col>
-                    <ion-col size="9">{{ item?.cli_ciudad }}</ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-card-content>
-    </ion-card>
-
-    <ion-card class="welcome-card">
         <img src="assets/images/revisaretiro2.jpg" alt="x1">
 
         <ion-card-header>
-            <ion-card-title class="ion-text-center">Datos del Destinatario</ion-card-title>
+            <ion-card-title>Datos del Origen</ion-card-title>
         </ion-card-header>
+        <ion-card-content style="padding-top: 5px;">
+            <ion-label>
+                <b>
+                    <h2 style="font-weight: bold;"><ion-icon slot="start" name="person-outline"></ion-icon>
+                        {{ item.cli_razon }}
+                    </h2>
+                    <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
+                        {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
+                    </p>
+                    <p><ion-icon slot="start" name="hand-left-outline"></ion-icon>
+                        {{ item.contacto }}
+                    </p>
+                    <p><ion-icon slot="start" name="basket-outline"></ion-icon>
+                        {{ item.obs_carga }}
+                    </p>
+                    <p><ion-icon slot="start" name="cube-outline"></ion-icon>
+                        Bultos: {{ item.bultos }}  Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}
+                    </p>
+                    <p class="verde"><ion-icon slot="start" name="cash-outline"></ion-icon>
+                        {{ item.tipo_pago }}
+                    </p>
+                    <p><ion-icon slot="start" name="calendar-outline"></ion-icon>
+                        In: {{ item.fecha_creacion }} - Out: {{ item.fecha_prometida }}
+                    </p>
+                    <p><ion-icon slot="start" name="call-outline"></ion-icon>
+                        <a href="tel:{{ item.cli_fono1 }}" style="padding-left: 5px;">{{ item.cli_fono1 }}</a>
+                    </p>
+                    <p><ion-icon slot="start" name="bandage-outline"></ion-icon>
+                        {{ item.cli_referencias }}
+                    </p>
+                </b>
+            </ion-label>
+        </ion-card-content>
 
-        <ion-card-content style="padding-top: 5px; text-align: justify;">
-            <ion-grid fixed style="font-size: 78%;text-align: justify;">
-                <ion-row>
-                    <ion-col size="3">Destino : </ion-col>
-                    <ion-col size="9">{{ item?.des_razon }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Rut : </ion-col>
-                    <ion-col size="9">{{ item?.des_rut }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Dirección : </ion-col>
-                    <ion-col size="9">{{ item?.des_direccion }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Comuna : </ion-col>
-                    <ion-col size="9">{{ item?.des_comuna }}</ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="3">Ciudad : </ion-col>
-                    <ion-col size="9">{{ item?.des_ciudad }}</ion-col>
-                </ion-row>
-            </ion-grid>
+        <ion-card-header>
+            <ion-card-title>Datos del Destino</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 5px;">
+            <ion-label>
+                <b>
+                    <h2><ion-icon slot="start" name="person-outline"></ion-icon>
+                        {{ item.des_razon }}
+                    </h2>
+                    <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
+                        {{ item.des_direccion }}, {{ item.des_comuna }}, {{ item.des_ciudad }}
+                    </p>
+                    <p><ion-icon slot="start" name="call-outline"></ion-icon>
+                        <a href="tel:{{ item.des_fono1 }}" style="padding-left: 5px;">{{ item.des_fono1 }}</a>
+                    </p>
+                    <p><ion-icon slot="start" name="bandage-outline"></ion-icon>
+                        {{ item.des_referencias }}
+                    </p>
+                </b>
+            </ion-label>
         </ion-card-content>
     </ion-card>
+
+    <ion-button expand="block" size="small" share="round" color="danger" (click)="retirar()" style="font-size: 80%;margin-top: 15px;padding-left: 20px;padding-right:20px">
+        Yo retiraré esta encomienda
+    </ion-button>
 
 </ion-content>

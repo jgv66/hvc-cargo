@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Mis retiros pendientes</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="reordenar()">
+                <ion-icon slot="icon-only" [name]=" reordenando ? 'list-circle' : 'list-outline' "></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Actualizando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card class="welcome-card">
+        <img src="assets/images/mispdf.jpg" alt="x1">
+    </ion-card>
+
+    <ion-list>
+        <ion-reorder-group [disabled]=" !reordenando " (ionItemReorder)="reorder( $event )">
+
+            <ion-item *ngFor="let item of retiros" [detail]=" !reordenando " (click)="retirar( item )">
+                <ion-label>
+                    <b>
+                    <h2 class="rojo"><ion-icon slot="start" name="person-outline"></ion-icon>
+                        {{ item.cli_razon }}
+                    </h2>
+                    <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
+                        {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
+                    </p>
+                    <p><ion-icon slot="start" name="hand-left-outline"></ion-icon>
+                        {{ item.contacto }}
+                    </p>
+                    <p><ion-icon slot="start" name="basket-outline"></ion-icon>
+                        {{ item.obs_carga }}
+                    </p>
+                    <p><ion-icon slot="start" name="cube-outline"></ion-icon>
+                        Bultos: {{ item.bultos }}  Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}
+                    </p>
+                    <p class="verde"><ion-icon slot="start" name="cash-outline"></ion-icon>
+                        {{ item.tipo_pago }}
+                    </p>
+                    <p><ion-icon slot="start" name="calendar-outline"></ion-icon>
+                        In: {{ item.fecha_creacion }} - Out: {{ item.fecha_prometida }}
+                    </p>
+                    <p><ion-icon slot="start" name="call-outline"></ion-icon>
+                        <a href="tel:{{ item.cli_fono1 }}" style="padding-left: 5px;">{{ item.cli_fono1 }}</a>
+                    </p>
+                    <p><ion-icon slot="start" name="bandage-outline"></ion-icon>
+                        {{ item.cli_referencias }}
+                    </p>
+                </b>
+                </ion-label>
+                <ion-reorder slot="end"></ion-reorder>
+            </ion-item>
+
+        </ion-reorder-group>
+
+    </ion-list>
+
+
+</ion-content>

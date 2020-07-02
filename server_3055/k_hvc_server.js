@@ -69,3 +69,61 @@ app.post('/pickpend',
                 }
             });
     });
+
+app.post('/misretiros',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.misPendientes(sql, req.body)
+            .then(function(data) {
+                console.log("/misretiros ", data);
+                try {
+                    if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    } else {
+                        res.json({ resultado: "nodata", datos: '' });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            });
+    });
+
+app.post('/yoLoRetiro',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.pickeoEsMio(sql, req.body)
+            .then(function(data) {
+                console.log("/yoLoRetiro ", data);
+                try {
+                    if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    } else {
+                        res.json({ resultado: "nodata", datos: 'Lo sentimos, paquete ya tiene un retirador asignado.' });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            });
+    });
+
+
+app.post('/pickpreord',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.ordenarMiPickeo(sql, req.body)
+            .then(function(data) {
+                console.log("/pickpreord ", data);
+                try {
+                    if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    } else {
+                        res.json({ resultado: "nodata", datos: 'Lo sentimos, paquete no se ordenó.' });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            });
+    });

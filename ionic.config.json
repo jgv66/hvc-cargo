@@ -1,7 +1,8 @@
 {
   "name": "m_chartay",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

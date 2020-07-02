@@ -19,6 +19,8 @@ import { ComponentsModule } from './components/components.module';
 import { DatosService } from './services/datos.service';
 import { FiltrarPipe } from './pipes/filtrar.pipe';
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+
 @NgModule({
   declarations: [AppComponent, FiltrarPipe],
   entryComponents: [],
@@ -27,14 +29,15 @@ import { FiltrarPipe } from './pipes/filtrar.pipe';
     ComponentsModule,
     HttpClientModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     DatosService,
     { provide: LOCALE_ID, useValue: 'es' },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    BarcodeScanner
   ],
   bootstrap: [AppComponent]
 })

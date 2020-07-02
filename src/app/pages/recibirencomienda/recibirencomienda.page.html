@@ -11,7 +11,7 @@
 <ion-content class="animated fadeIn">
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Actualizando...">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Tire para refrescar" refreshingSpinner="circles" refreshingText="Actualizando...">
         </ion-refresher-content>
     </ion-refresher>
 
@@ -20,20 +20,20 @@
     </ion-card>
 
     <ion-list>
-        <ion-item *ngFor="let item of retiros" detail (click)="revisar( item )">
-            <ion-label>
-                <h2><b>{{ item.cli_razon }}</b></h2>
-                <p><b>{{ item.cli_direccion }}</b></p>
-                <p><b>{{ item.cli_comuna}} - {{ item.cli_ciudad }}</b></p>
-                <p>Destinatario : {{ item.des_razon }}</p>
-                <p>Ingreso : {{ item.fecha_creacion | date: "dd.MMMyyyy" }} - Solicitado : {{ item.fecha_prometida | date: "dd.MMMyyyy" }}</p>
-                <!-- <p>{{ item.cli_referencias }}</p> -->
-                <!-- <p><a href="tel:{{ item.cli_fono1 }}"><b> {{ item.cli_fono1 }}</b></a></p> -->
-            </ion-label>
-            <!-- <ion-button slot="end" color="mango" (click)="revisar( item )">Revisar</ion-button> -->
-            <ion-progress-bar *ngIf=" item.descargando " type="indeterminate"></ion-progress-bar>
-        </ion-item>
-    </ion-list>
 
+        <ion-item *ngFor="let item of retiros; let i = index;" detail (click)="revisar( item, i )">
+            <ion-label>
+                <h2 style="font-weight: bold; color: red">{{ item.cli_razon }}</h2>
+                <b>
+                <p>{{ item.cli_direccion }}, {{ item.cli_comuna}}, {{ item.cli_ciudad }}</p>
+                <p>Destinatario : {{ item.des_razon }}</p>
+                <p>Ingreso : {{ item.fecha_creacion }} - Solicitado : {{ item.fecha_prometida }}</p>
+            </b>
+            </ion-label>
+            <!-- <ion-progress-bar *ngIf=" item.descargando " type="indeterminate"></ion-progress-bar> -->
+            <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+
+    </ion-list>
 
 </ion-content>
