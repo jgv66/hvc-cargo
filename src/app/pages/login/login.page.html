@@ -31,18 +31,17 @@
                     <ion-label position="stacked">Password</ion-label>
                     <ion-input autocomplete="off" type="password" name="miClave" [(ngModel)]="miClave"></ion-input>
                 </ion-item>
+                <ion-row style="font-size: 70%;margin-top: 10px;">
+                    <ion-col *ngIf=" !datos.logeado ">
+                        <ion-button style="margin-top: 40px;" color="primary" expand="block" fill="outline" size="small" (click)="login()">Validar estos datos e ingresar</ion-button>
+                    </ion-col>
+                </ion-row>
 
-                <ion-button style="font-size: 80%;margin-top: 40px;" expand="block" size="small" share="round" color="primary" fill="outline" (click)="login()">Validar estos datos e ingresar</ion-button>
+                <img style="margin-bottom: 25px; margin-top:20px;" class="img kntk" src="assets/images/logo-kinetik.png" alt="mi_logo">
 
             </ion-list>
             <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
-            <!-- 
-            <ion-row style="font-size: 60%;margin-top: 10px;">
-                <ion-col size="6" offset="3">
-                    <ion-button (click)="iforgot()" fill="clear" size="small">No recuerdo mi clave</ion-button>
-                </ion-col>
-            </ion-row>
- -->
+
         </ion-card-content>
 
     </ion-card>

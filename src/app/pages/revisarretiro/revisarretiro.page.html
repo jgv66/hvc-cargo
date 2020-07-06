@@ -15,7 +15,7 @@
         <img src="assets/images/revisaretiro2.jpg" alt="x1">
 
         <ion-card-header>
-            <ion-card-title>Datos del Origen</ion-card-title>
+            <ion-card-title>Origen cargo</ion-card-title>
         </ion-card-header>
         <ion-card-content style="padding-top: 5px;">
             <ion-label>
@@ -36,7 +36,7 @@
                         Bultos: {{ item.bultos }}  Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}
                     </p>
                     <p class="verde"><ion-icon slot="start" name="cash-outline"></ion-icon>
-                        {{ item.tipo_pago }}
+                        {{ item.tipo_pago }} {{ item.desc_pago }}
                     </p>
                     <p><ion-icon slot="start" name="calendar-outline"></ion-icon>
                         In: {{ item.fecha_creacion }} - Out: {{ item.fecha_prometida }}
@@ -52,7 +52,7 @@
         </ion-card-content>
 
         <ion-card-header>
-            <ion-card-title>Datos del Destino</ion-card-title>
+            <ion-card-title>Destino cargo</ion-card-title>
         </ion-card-header>
         <ion-card-content style="padding-top: 5px;">
             <ion-label>

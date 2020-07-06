@@ -5,6 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 import { OrdenpikPage } from './ordenpik.page';
+import { PickingPage } from '../picking/picking.page';
+import { PickingPageModule } from '../picking/picking.module';
 
 const routes: Routes = [
   {
@@ -14,10 +16,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  entryComponents: [PickingPage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PickingPageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [OrdenpikPage]

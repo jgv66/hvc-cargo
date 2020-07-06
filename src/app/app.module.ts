@@ -19,6 +19,7 @@ import { ComponentsModule } from './components/components.module';
 import { DatosService } from './services/datos.service';
 import { FiltrarPipe } from './pipes/filtrar.pipe';
 
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @NgModule({
@@ -37,7 +38,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
     DatosService,
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    BarcodeScanner
+    BarcodeScanner,
+    OpenNativeSettings
   ],
   bootstrap: [AppComponent]
 })

@@ -88,4 +88,77 @@ export class FuncionesService {
     }
     return amountParts.join('.');
   }
+
+  // LZW-compress a string
+  lzw_encode(s) {
+    const dict = {};
+    const data = (s + '').split('');
+    const out = [];
+    let currChar;
+    let phrase = data[0];
+    let code = 256;
+    for (let i = 1; i < data.length; i++) {
+        currChar = data[i];
+        if (dict[phrase + currChar] != null) {
+            phrase += currChar;
+        } else {
+            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+            dict[phrase + currChar] = code;
+            code++;
+            phrase = currChar;
+        }
+    }
+    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+    for (let i = 0; i < out.length; i++) {
+        out[i] = String.fromCharCode(out[i]);
+    }
+    return out.join('');
+  }
+
+  // Decompress an LZW-encoded string
+  lzw_decode(s) {
+    const dict = {};
+    const data = (s + '').split('');
+    let currChar = data[0];
+    let oldPhrase = currChar;
+    const out = [currChar];
+    let code = 256;
+    let phrase;
+    for (let i = 1; i < data.length; i++) {
+        const currCode = data[i].charCodeAt(0);
+        if (currCode < 256) {
+            phrase = data[i];
+        } else {
+            phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+        }
+        out.push(phrase);
+        currChar = phrase.charAt(0);
+        dict[code] = oldPhrase + currChar;
+        code++;
+        oldPhrase = phrase;
+    }
+    return out.join('');
+  }
+
+  // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+  b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+
 }

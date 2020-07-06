@@ -37,7 +37,9 @@ export class RecibirencomiendaPage implements OnInit {
             // console.log(dev);
             this.cargando = false;
             if ( dev.resultado === 'error' ) {
-              this.funciones.msgAlert( 'ATENCION', 'No existen retiros pendientes para rescatar y desplegar.' );
+              this.funciones.msgAlert( 'ATENCION', 'No existen retiros pendientes.' );
+            } else if ( dev.resultado === 'nodata' ) {
+                this.funciones.msgAlert( '', 'No existen retiros pendientes.' );
             } else {
               this.retiros = dev.datos;
             }
