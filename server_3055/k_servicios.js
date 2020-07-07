@@ -211,18 +211,15 @@ module.exports = {
             });
     },
     //
-    saveIMG: function(sql, imagenes, id_pqt) {
-        //
-        const ib64 = lzw_decode(imagenes[0].img);
+    saveIMG: function(sql, ib64, extension, id_pqt) {
         // 
         var query = `insert into k_paquetes_img 
-                            ( id_paquete, fechains, imagen_ext, imagen_b64 ) 
-                     values ( ${ id_pqt }, getdate(), '${ imagenes[0].format }', '${ ib64 }' ) ;`;
+                            ( id_paquete, fechains, img_exten, img_name ) 
+                     values ( ${ id_pqt }, getdate(), '${ extension }', '${ ib64 }' ) ;`;
         // console.log('saveIMG', query);
         const request = new sql.Request();
         return request.query(query)
             .then(resultado => {
-                console.log(1111, resultado);
                 return resultado.recordset;
             })
             .then(resultado => {
@@ -233,7 +230,7 @@ module.exports = {
                 return { resultado: 'error', datos: err };
             });
     },
-    //
+    // 
     getImages: function(sql, body) {
         // --------------------------------------------------------------------------------------------------
         const query = `

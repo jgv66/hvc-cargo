@@ -37,4 +37,17 @@ export class DatosService {
     return value;
   }
 
+  uploadImage( imgb64, name, ext, idPaquete ) {
+    //
+    const url = this.url + '/imgUpload';
+    //
+    const formData = new FormData();
+    formData.append('foto',      imgb64 );
+    formData.append('name',      name);
+    formData.append('extension', ext);
+    formData.append('id_pqt',    idPaquete );
+    //
+    return this.http.post(url, formData);
+  }
+
 }

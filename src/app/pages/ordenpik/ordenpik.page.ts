@@ -33,7 +33,6 @@ export class OrdenpikPage implements OnInit {
   ionViewWillEnter() {
     this.cargarDatos();
   }
-
   cargarDatos( event? ) {
     this.cargando = true;
     this.datos.servicioWEB( '/misretiros', { ficha: this.datos.ficha } )
@@ -97,9 +96,7 @@ export class OrdenpikPage implements OnInit {
           this.funciones.muestraySale('Guardado en orden', 0.5, 'middle');
         }
       });
-
   }
-
   reorder( event ) {
     this.reorden = true;
     const desde = event.detail.from;
@@ -117,27 +114,20 @@ export class OrdenpikPage implements OnInit {
     await modal.present();
     //
     const { data } = await modal.onWillDismiss();
-    console.log(data);
+    // console.log(data);
     if ( data ) {
       this.grabando = true;
-      //
-      const img = [];
-      data.fotos.forEach( ele => {
-        img.push( { img: ele.imgb64zip, format: ele.format } );
-      });
       //
       this.datos.servicioWEB( '/pickeado', { ficha:  this.datos.ficha,
                                              id_pqt: item.id_paquete,
                                              obs:    data.obs,
-                                             nroDoc: data.nroDoc,
-                                             foto:   img.length === 0 ? undefined : JSON.stringify(img) } )
+                                             nroDoc: data.nroDoc } )
         .subscribe( (dev: any) => {
             this.grabando = false;
-            // console.log(dev);
             if ( dev.resultado === 'ok' ) {
               this.retiros.splice( pos, 1 );
               this.funciones.muestraySale( 'Retiro exitoso.', 1, 'middle' );
-              this.rescatar(item);
+              // this.rescatar(item);
             } else {
               this.funciones.msgAlert('', dev.datos);
             }

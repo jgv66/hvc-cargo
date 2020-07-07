@@ -39,7 +39,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
-    OpenNativeSettings
+    OpenNativeSettings,
   ],
   bootstrap: [AppComponent]
 })
