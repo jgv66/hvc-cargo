@@ -5,7 +5,7 @@
                 <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>Retiro Pendiente</ion-title>
+        <ion-title>{{ titulo }}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -74,7 +74,7 @@
         </ion-card-content>
     </ion-card>
 
-    <ion-button expand="block" size="small" share="round" color="danger" (click)="retirar()" style="font-size: 80%;margin-top: 15px;padding-left: 20px;padding-right:20px">
+    <ion-button *ngIf=" !acopio " expand="block" size="small" share="round" color="danger" (click)="retirar()" style="font-size: 80%;margin-top: 15px;padding-left: 20px;padding-right:20px">
         Yo retiraré esta encomienda
     </ion-button>
 

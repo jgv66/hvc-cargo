@@ -1,9 +1,40 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>acopiar</ion-title>
-  </ion-toolbar>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Pendientes de acopio</ion-title>
+    </ion-toolbar>
 </ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
 
-<ion-content>
+<ion-content class="animated fadeIn">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Tire para refrescar" refreshingSpinner="circles" refreshingText="Actualizando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card class="welcome-card">
+        <img src="assets/images/anticipo.jpg" alt="x1">
+    </ion-card>
+
+    <p style="margin: 20px; font-size: 85%;text-align: justify;">
+        Esta lista corresponde a las encomiendas que ha retirado pero que aún no son recibidas por el acopiador. Estos desaparecerán de esta lista una vez que sean recibidos e ingresados a bodega de acopio.
+    </p>
+
+    <ion-list>
+        <ion-item *ngFor="let item of acopios; let i = index;" detail (click)="revisar( item, i )">
+            <!-- <ion-checkbox slot="start" [(ngModel)]="item.marcado"></ion-checkbox> -->
+            <ion-label>
+                <h2 style="font-weight: bold; color: var(--ion-color-primary) ">(# {{ item.id_paquete }}) {{ item.cli_razon }}</h2>
+                <b>
+                    <p>{{ item.cli_direccion }}, {{ item.cli_comuna}}, {{ item.cli_ciudad }}</p>
+                    <p>Destinatario : {{ item.des_razon }}</p>
+                    <p>Ingreso : {{ item.fecha_creacion }} - Solicitado : {{ item.fecha_prometida }}</p>
+                </b>
+            </ion-label>
+        </ion-item>
+    </ion-list>
 
 </ion-content>

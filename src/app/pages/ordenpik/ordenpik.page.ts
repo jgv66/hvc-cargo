@@ -135,15 +135,4 @@ export class OrdenpikPage implements OnInit {
     }
   }
 
-  rescatar(item) {
-    this.datos.servicioWEB( '/getimages', { id_pqt: item.id_paquete } )
-      .subscribe( (dev: any) => {
-        console.log('/getimages', dev);
-        const datos = JSON.parse( dev.datos );
-        console.log(datos);
-        console.log(datos[0].imgb64.lenght);
-        this.foto = datos[0].imgb64;
-      });
-  }
-
 }

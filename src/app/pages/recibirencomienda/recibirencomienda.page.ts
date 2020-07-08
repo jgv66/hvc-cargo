@@ -59,7 +59,7 @@ export class RecibirencomiendaPage implements OnInit {
   async revisar( item, pos ) {
     const modal = await this.modalCtrl.create({
       component: RevisarretiroPage,
-      componentProps: { item }
+      componentProps: { item, acopio: false }
     });
     await modal.present();
     //

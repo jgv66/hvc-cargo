@@ -9,11 +9,16 @@ import { ModalController, AlertController } from '@ionic/angular';
 export class RevisarretiroPage implements OnInit {
 
   @Input() item;
+  @Input() acopio;
+
+  titulo = '';
 
   constructor( private modalCtrl: ModalController,
                private alertCtrl: AlertController ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.titulo = this.acopio === true ? 'Pendiente de acopiar' : 'Retiro Pendiente';
+  }
 
   salir() {
     this.modalCtrl.dismiss();

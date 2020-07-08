@@ -212,3 +212,25 @@ app.post('/getimages', function(req, res) {
             res.json({ resultado: 'error', datos: err });
         });
 });
+
+app.post('/acopiar',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.acopioPendiente(sql, req.body)
+            .then(function(data) {
+                // console.log("/acopios ", data);
+                try {
+                    if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    } else {
+                        res.json({ resultado: "nodata", datos: '' });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
