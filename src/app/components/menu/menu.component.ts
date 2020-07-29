@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
       children: [
         { title: 'Pendientes de retirar',  url: '/pikear',   icon: 'gift-outline'      },
         { title: 'Mis retiros pendientes', url: '/ordenpik', icon: 'bicycle-outline'   },
-        { title: 'Entrega en acopio',      url: '/acopiar',  icon: 'business-outline'  },
+        { title: 'Pendientes de acopiar',  url: '/acopiar',  icon: 'business-outline'  },
       ]
     },
     {

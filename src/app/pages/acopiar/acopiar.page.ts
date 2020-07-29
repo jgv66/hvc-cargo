@@ -3,7 +3,7 @@ import { DatosService } from '../../services/datos.service';
 import { FuncionesService } from '../../services/funciones.service';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { RevisarretiroPage } from '../revisarretiro/revisarretiro.page';
+import { RevisaracopioPage } from '../revisaracopio/revisaracopio.page';
 
 @Component({
   selector: 'app-acopiar',
@@ -58,8 +58,8 @@ export class AcopiarPage implements OnInit {
 
   async revisar( item, pos ) {
     const modal = await this.modalCtrl.create({
-      component: RevisarretiroPage,
-      componentProps: { item, acopio: true }
+      component: RevisaracopioPage,
+      componentProps: { item }
     });
     await modal.present();
     //

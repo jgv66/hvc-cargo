@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Pendientes de acopio</ion-title>
+        <ion-title>Acopio</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
@@ -19,11 +19,15 @@
         <img src="assets/images/anticipo.jpg" alt="x1">
     </ion-card>
 
-    <p style="margin: 20px; font-size: 85%;text-align: justify;">
-        Esta lista corresponde a las encomiendas que ha retirado pero que aún no son recibidas por el acopiador. Estos desaparecerán de esta lista una vez que sean recibidos e ingresados a bodega de acopio.
+    <p class="texto">
+        Esta lista corresponde a las encomiendas que ud. ha retirado pero que aún no son recibidas por el acopiador. Estos serán eliminados como pendientes una vez que el responsable de dicha tarea lo haya recibido e ingresado a la bodega de acopio.
     </p>
 
     <ion-list>
+        <ion-list-header mode="ios">
+            <ion-label class="mg-cero">Pendientes de acopiar</ion-label>
+        </ion-list-header>
+
         <ion-item *ngFor="let item of acopios; let i = index;" detail (click)="revisar( item, i )">
             <!-- <ion-checkbox slot="start" [(ngModel)]="item.marcado"></ion-checkbox> -->
             <ion-label>

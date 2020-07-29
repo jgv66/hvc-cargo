@@ -49,6 +49,7 @@ export class LoginPage implements OnInit {
   login() {
     this.cargando = true;
     const pssw = window.btoa( this.miClave );
+    // console.log(this.miClave, pssw);
     // console.log( window.btoa(this.miEmail), window.btoa( this.miClave ), window.btoa( '123HVC' ) );
     // this.datos.servicioWEB( '/validarUser', { rut: this.stringToHex( this.miRut ), clave: this.stringToHex( this.miClave ) } )
     this.datos.servicioWEB( '/usr', { email: this.miEmail.toLowerCase(), clave: pssw } )

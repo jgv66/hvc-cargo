@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
+import { DatosService } from '../../services/datos.service';
 
 @Component({
   selector: 'app-revisarretiro',
@@ -12,12 +13,15 @@ export class RevisarretiroPage implements OnInit {
   @Input() acopio;
 
   titulo = '';
+  foto = null;
+  cargando = false;
 
   constructor( private modalCtrl: ModalController,
-               private alertCtrl: AlertController ) { }
+               private alertCtrl: AlertController,
+               private datos: DatosService ) { }
 
   ngOnInit() {
-    this.titulo = this.acopio === true ? 'Pendiente de acopiar' : 'Retiro Pendiente';
+    this.titulo = ( this.acopio === true ) ? 'Pendiente de acopiar' : 'Retiro Pendiente';
   }
 
   salir() {

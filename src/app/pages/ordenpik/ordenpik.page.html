@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Mis retiros pendientes</ion-title>
+        <ion-title>Pendientes</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="reordenar()">
                 <ion-icon slot="icon-only" [name]=" reordenando ? 'list-circle' : 'list-outline' "></ion-icon>
@@ -29,6 +29,11 @@
     </ion-card>
 
     <ion-list>
+
+        <ion-list-header mode="ios">
+            <ion-label class="mg-cero">Mis retiros pendientes</ion-label>
+        </ion-list-header>
+
         <ion-reorder-group [disabled]=" !reordenando " (ionItemReorder)="reorder( $event )">
 
             <ion-item *ngFor="let item of retiros; let i = index;" [detail]=" !reordenando " (click)="retirar( item, i )">

@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Pendientes de Retiro</ion-title>
+        <ion-title>Retiros</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
@@ -20,6 +20,9 @@
     </ion-card>
 
     <ion-list>
+        <ion-list-header mode="ios">
+            <ion-label class="mg-cero">Pendientes de retirar</ion-label>
+        </ion-list-header>
         <ion-item *ngFor="let item of retiros; let i = index;" detail (click)="revisar( item, i )">
             <ion-label>
                 <h2 style="font-weight: bold; color: red">{{ item.cli_razon }}</h2>

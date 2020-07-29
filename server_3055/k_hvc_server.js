@@ -41,6 +41,11 @@ var server = app.listen(3055, function() {
     console.log("Escuchando en ", port);
 });
 
+app.get('/ping',
+    function(req, res) {
+        res.json({ resultado: "PONG" });
+    });
+
 app.post('/usr',
     function(req, res) {
         //
@@ -62,19 +67,31 @@ app.post('/usr',
             });
     });
 
-app.post('/pickpend',
+app.get('/usuarios',
     function(req, res) {
         //
         console.log(req.body);
-        servicios.pickeoPendiente(sql, req.body)
+        servicios.todos(sql, req.body)
             .then(function(data) {
-                // console.log("/pickpend ", data);
                 try {
-                    if (data[0].resultado === true) {
-                        res.json({ resultado: "ok", datos: data });
-                    } else {
-                        res.json({ resultado: "nodata", datos: '' });
-                    }
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/grabarUsuario',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.grabarUsuario(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
                 } catch (error) {
                     res.status(500).json({ resultado: 'error', datos: error });
                 }
@@ -82,6 +99,47 @@ app.post('/pickpend',
             .catch(function(error) {
                 res.status(500).json({ resultado: 'error', datos: error });
             });
+    });
+
+app.post('/pickpend',
+    function(req, res) {
+        //
+        console.log(req.body);
+        if (req.body.todos !== undefined) {
+            servicios.pickeoPendienteWeb(sql, req.body)
+                .then(function(data) {
+                    // console.log("/pickpend ", data);
+                    try {
+                        if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
+                        } else {
+                            res.json({ resultado: "nodata", datos: '' });
+                        }
+                    } catch (error) {
+                        res.status(500).json({ resultado: 'error', datos: error });
+                    }
+                })
+                .catch(function(error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                });
+        } else {
+            servicios.pickeoPendiente(sql, req.body)
+                .then(function(data) {
+                    // console.log("/pickpend ", data);
+                    try {
+                        if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
+                        } else {
+                            res.json({ resultado: "nodata", datos: '' });
+                        }
+                    } catch (error) {
+                        res.status(500).json({ resultado: 'error', datos: error });
+                    }
+                })
+                .catch(function(error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                });
+        }
     });
 
 app.post('/misretiros',
@@ -154,20 +212,21 @@ app.post('/pickpreord',
 var upload = multer({ dest: CARPETA_IMG });
 var type = upload.single('file');
 
-app.post('/imgUpload', type, function(req, res) {
-    //
-    var nombre_completo = CARPETA_IMG + req.body.name;
-    /** A better way to copy the uploaded file. **/
-    var data = req.body.foto.split(';base64,').pop();
-    fs.writeFile(nombre_completo, data, { encoding: 'base64' }, function(err) {
-        if (err) {
-            return res.status(500).json({ resultado: 'error', mensaje: err });
-        } else {
-            servicios.saveIMG(sql, req.body.name, req.body.extension, req.body.id_pqt);
-            return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen fue grabada.' });
-        }
+app.post('/imgUpload', type,
+    function(req, res) {
+        //
+        var nombre_completo = CARPETA_IMG + req.body.name;
+        /** A better way to copy the uploaded file. **/
+        var data = req.body.foto.split(';base64,').pop();
+        fs.writeFile(nombre_completo, data, { encoding: 'base64' }, function(err) {
+            if (err) {
+                return res.status(500).json({ resultado: 'error', mensaje: err });
+            } else {
+                servicios.saveIMG(sql, req.body.name, req.body.extension, req.body.id_pqt);
+                return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen fue grabada.' });
+            }
+        });
     });
-});
 
 app.post('/pickeado',
     function(req, res) {
@@ -192,40 +251,177 @@ app.post('/pickeado',
             });
     });
 
-app.post('/getimages', function(req, res) {
-    //
-    servicios.getImages(sql, req.body)
-        .then(function(data) {
-            //
-            // console.log(data);
-            if (data.resultado === 'ok') {
+app.post('/getimages',
+    function(req, res) {
+        //
+        servicios.getImages(sql, req.body)
+            .then(function(data) {
                 //
+                // console.log(data);
                 if (data.resultado === 'ok') {
-                    res.json({ resultado: 'ok', datos: data.datos });
-                } else {
-                    res.json({ resultado: 'error', datos: data.mensaje });
+                    //
+                    if (data.resultado === 'ok') {
+                        res.json({ resultado: 'ok', datos: data.datos });
+                    } else {
+                        res.json({ resultado: 'error', datos: data.mensaje });
+                    }
                 }
-            }
-        })
-        .catch(function(err) {
-            console.log("/getimages ", err);
-            res.json({ resultado: 'error', datos: err });
-        });
-});
+            })
+            .catch(function(err) {
+                console.log("/getimages ", err);
+                res.json({ resultado: 'error', datos: err });
+            });
+    });
 
 app.post('/acopiar',
     function(req, res) {
         //
         console.log(req.body);
-        servicios.acopioPendiente(sql, req.body)
-            .then(function(data) {
-                // console.log("/acopios ", data);
-                try {
-                    if (data[0].resultado === true) {
-                        res.json({ resultado: "ok", datos: data });
-                    } else {
-                        res.json({ resultado: "nodata", datos: '' });
+        if (req.body.todos !== undefined) {
+            servicios.acopioPendienteWeb(sql, req.body)
+                .then(function(data) {
+                    // console.log("/acopios ", data);
+                    try {
+                        if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
+                        } else {
+                            res.json({ resultado: "nodata", datos: '' });
+                        }
+                    } catch (error) {
+                        res.status(500).json({ resultado: 'error', datos: error });
                     }
+                })
+                .catch(function(error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                });
+        } else {
+            servicios.acopioPendiente(sql, req.body)
+                .then(function(data) {
+                    // console.log("/acopios ", data);
+                    try {
+                        if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
+                        } else {
+                            res.json({ resultado: "nodata", datos: '' });
+                        }
+                    } catch (error) {
+                        res.status(500).json({ resultado: 'error', datos: error });
+                    }
+                })
+                .catch(function(error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                });
+        }
+    });
+
+app.get('/tipopago',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.tiposDePago(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: 'No existen tipos de pago' });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+app.get('/ciudades',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.ciudades(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: 'No existen ciudades' });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/clientes',
+    function(req, res) {
+        //
+        servicios.clientes(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: 'No existen clientes' });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/upClientes',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.upClientes(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/grabarEncomienda',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.newEncomienda(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/estado_pqt',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.dondeEstas(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/borrar_pqt',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.borrarEncomienda(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
                 } catch (error) {
                     res.status(500).json({ resultado: 'error', datos: error });
                 }

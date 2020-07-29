@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">hvcCargo</string>
-    <string name="title_activity_main">hvcCargo</string>
-    <string name="package_name">cl.kinetik.hvcCargo</string>
-    <string name="custom_url_scheme">cl.kinetik.hvcCargo</string>
-</resources>
