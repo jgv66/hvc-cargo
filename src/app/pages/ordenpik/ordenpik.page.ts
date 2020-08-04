@@ -118,15 +118,17 @@ export class OrdenpikPage implements OnInit {
     if ( data ) {
       this.grabando = true;
       //
-      this.datos.servicioWEB( '/pickeado', { ficha:  this.datos.ficha,
-                                             id_pqt: item.id_paquete,
-                                             obs:    data.obs,
-                                             nroDoc: data.nroDoc } )
+      this.datos.servicioWEB( '/pickeado', { ficha:    this.datos.ficha,
+                                             problema: data.problema,
+                                             queprobl: data.queprobl,
+                                             id_pqt:   item.id_paquete,
+                                             obs:      data.obs,
+                                             nroDoc:   data.nroDoc } )
         .subscribe( (dev: any) => {
             this.grabando = false;
             if ( dev.resultado === 'ok' ) {
               this.retiros.splice( pos, 1 );
-              this.funciones.muestraySale( 'Retiro exitoso.', 1, 'middle' );
+              this.funciones.muestraySale( 'Retiro se grabó.', 1, 'middle' );
               // this.rescatar(item);
             } else {
               this.funciones.msgAlert('', dev.datos);

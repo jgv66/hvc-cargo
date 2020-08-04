@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { ModalController, IonSegment } from '@ionic/angular';
 import { Plugins, CameraResultType } from '@capacitor/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FuncionesService } from 'src/app/services/funciones.service';
@@ -15,12 +15,18 @@ const { Camera } = Plugins;
 })
 export class PickingPage implements OnInit {
 
+  @ViewChild( IonSegment, {static: true} ) segment: IonSegment;
+
   @Input() item;
+
+  segmento = 'retiroOK';
   it = [ false, false, false, false, false ];
   nroDocumento = '';
   foto = null;
   imageName = null;
   formato = null;
+  queprobl = '310';
+  obsProblema = '';
 
   constructor(private sanitizer: DomSanitizer,
               private datos: DatosService,
@@ -32,10 +38,22 @@ export class PickingPage implements OnInit {
     if ( this.datos.ficha === undefined ) {
       this.router.navigate(['/home']);
     }
+    this.segment.value = this.segmento;
   }
 
   salir() {
     this.modalCtrl.dismiss();
+  }
+
+  segmentChanged( event ) {
+    const valorSegmento = event.detail.value;
+    //
+    if ( valorSegmento === 'todos' ) {
+      this.segmento = '';
+      return;
+    }
+    //
+    this.segmento = valorSegmento;
   }
 
   async tomarFoto() {
@@ -62,6 +80,22 @@ export class PickingPage implements OnInit {
     this.formato = null;
   }
 
+  problemas() {
+    // se graba la imagen en formato base64 y en paralelo el picking
+    if ( this.foto !== null ) {
+      this.datos.uploadImage( this.foto, this.imageName, this.formato, this.item.id_paquete )
+      .subscribe(( newImage ) => {
+        console.log(newImage);
+      });
+    }
+    // grabacion de picking
+    this.modalCtrl.dismiss({ ok:       true,
+                              problema: true,
+                              queprobl: this.queprobl,
+                              obs:      this.obsProblema,
+                              nroDoc:   '' });
+  }
+
   todoOk(): boolean {
     return ( this.it[0] === true && this.it[1] === true && this.it[2] === true && this.it[3] === true && this.it[4] === true );
   }
@@ -69,14 +103,18 @@ export class PickingPage implements OnInit {
   retirar() {
     if ( this.todoOk() === true ) {
       // se graba la imagen en formato base64 y en paralelo el picking
-      this.datos.uploadImage( this.foto, this.imageName, this.formato, this.item.id_paquete )
+      if ( this.foto !== null ) {
+        this.datos.uploadImage( this.foto, this.imageName, this.formato, this.item.id_paquete )
           .subscribe(( newImage ) => {
             console.log(newImage);
           });
+      }
       // grabacion de picking
-      this.modalCtrl.dismiss({ ok:     true,
-                               obs:    this.item.obs_pickeo,
-                               nroDoc: this.nroDocumento });
+      this.modalCtrl.dismiss({ ok:       true,
+                               problema: false,
+                               queprobl: this.queprobl,
+                               obs:      this.item.obs_pickeo,
+                               nroDoc:   this.nroDocumento });
     } else {
       this.funciones.msgAlert( '', 'Para grabar el retiro debe dejar ticados todos los ítemes. Corrija y reintente o solo abandone.' );
     }

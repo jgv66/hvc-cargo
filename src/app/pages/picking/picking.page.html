@@ -5,7 +5,7 @@
                 <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>Retiro # {{ item?.id_paquete }}</ion-title>
+        <ion-title>(#{{ item?.id_paquete }}) Retiro</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="tomarFoto()">
                 <ion-icon slot="icon-only" size="large" name="camera-outline"></ion-icon>
@@ -16,14 +16,18 @@
 
 <ion-content class="animated fadeIn">
 
-    <ion-list style="margin-top:5px;">
+    <ion-segment color="tertiary" mode="ios" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="retiroOK">
+            <ion-label>Todo OK</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="retiroBAD">
+            <ion-label>Problemas</ion-label>
+        </ion-segment-button>
+    </ion-segment>
 
-        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify;">
-            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
-            la encomienda de pendiente a 'Acopios'.
-        </p>
+    <ion-list *ngIf=" segmento === 'retiroOK' " class="animated fadeIn" lines="none" style="margin-top:5px;">
 
-        <ion-list-header style="margin-top:20px; margin-bottom:20px">
+        <ion-list-header style="margin-top:5px; margin-bottom:10px">
             <ion-label><b>
                 <div *ngIf=" item.tipo_pago === 'PRE-PAGO' ">
                     <h1 class="rojo ion-text-center">{{ item.tipo_pago }} ${{ item.valor_cobrado | number:"1.0-0" }}.-</h1>
@@ -56,15 +60,13 @@
             <ion-label>Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}</ion-label>
         </ion-item>
         <ion-item>
-            <ion-label style="margin-left: 42px;" position="staked">Nro.Guía o Bol. o Fact.:</ion-label>
-            <ion-input type="number" name="nroDocumento" [(ngModel)]="nroDocumento"></ion-input>
+            <ion-label style="margin-left: 3px;" position="staked">Nro.de Documento:</ion-label>
+            <ion-input type="text" name="nroDocumento" [(ngModel)]="nroDocumento"></ion-input>
         </ion-item>
-
         <ion-item>
             <ion-label position="stacked">Observaciones al retirar</ion-label>
             <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="item.obs_pickeo" [(ngModel)]="item.obs_pickeo"></ion-textarea>
         </ion-item>
-
         <ion-card *ngIf=" foto " class="fotocard">
             <img [src]="foto">
             <ion-card-content style="margin-bottom: 0px;">
@@ -74,7 +76,11 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-row style="font-size: 80%;margin-top: 25px;padding-left: 20px;padding-right:20px">
+        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 25px;">
+            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
+            la encomienda de pendiente a 'Acopios'.
+        </p>
+        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
             <ion-col size="4">
                 <ion-button expand="block" size="small" share="round" color="" (click)="salir()">
                     Abandonar
@@ -86,6 +92,51 @@
                 </ion-button>
             </ion-col>
         </ion-row>
+
+    </ion-list>
+    <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
+        <ion-list-header style="margin-top:5px; margin-bottom:10px">
+            <ion-label>
+                <b>
+                <h1 class="rojo ion-text-center">Problemas con el retiro</h1>
+                </b>
+            </ion-label>
+        </ion-list-header>
+        <ion-radio-group name="queprobl" [(ngModel)]="queprobl" value="310">
+            <ion-item>
+                <ion-radio slot="start" value="310"></ion-radio>
+                <ion-label>Dirección incorrecta</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-radio slot="start" value="320"></ion-radio>
+                <ion-label>Cliente no encontrado</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-radio slot="start" value="330"></ion-radio>
+                <ion-label>Sin dinero para envío (${{ item.valor_cobrado | number:"1.0-0" }}.-)</ion-label>
+            </ion-item>
+        </ion-radio-group>
+        <ion-item>
+            <ion-label position="stacked">Observaciones al problema</ion-label>
+            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="obsProblema" [(ngModel)]="obsProblema"></ion-textarea>
+        </ion-item>
+        <ion-card *ngIf=" foto " class="fotocard">
+            <img [src]="foto">
+            <ion-card-content style="margin-bottom: 0px;">
+                <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -300px;">
+                    <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
+                </ion-button>
+            </ion-card-content>
+        </ion-card>
+        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
+            <ion-col size="12">
+                <ion-button expand="block" size="small" share="round" color="danger" (click)="problemas()">
+                    <ion-icon slot="start" name="rainy-outline"></ion-icon>
+                    Guardar los problemas del retiro
+                </ion-button>
+            </ion-col>
+        </ion-row>
+
     </ion-list>
 
 </ion-content>

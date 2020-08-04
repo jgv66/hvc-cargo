@@ -276,16 +276,17 @@ app.post('/getimages',
 app.post('/acopiar',
     function(req, res) {
         //
-        console.log(req.body);
+        console.log('/acopiar', req.body);
         if (req.body.todos !== undefined) {
-            servicios.acopioPendienteWeb(sql, req.body)
+            console.log(1111);
+            servicios.enAcopioPendienteWeb(sql, req.body)
                 .then(function(data) {
                     // console.log("/acopios ", data);
                     try {
-                        if (data[0].resultado === true) {
-                            res.json({ resultado: "ok", datos: data });
-                        } else {
+                        if (data.length === 0) {
                             res.json({ resultado: "nodata", datos: '' });
+                        } else if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
                         }
                     } catch (error) {
                         res.status(500).json({ resultado: 'error', datos: error });
@@ -295,14 +296,15 @@ app.post('/acopiar',
                     res.status(500).json({ resultado: 'error', datos: error });
                 });
         } else {
+            console.log(22222);
             servicios.acopioPendiente(sql, req.body)
                 .then(function(data) {
                     // console.log("/acopios ", data);
                     try {
-                        if (data[0].resultado === true) {
-                            res.json({ resultado: "ok", datos: data });
-                        } else {
+                        if (data.length === 0) {
                             res.json({ resultado: "nodata", datos: '' });
+                        } else if (data[0].resultado === true) {
+                            res.json({ resultado: "ok", datos: data });
                         }
                     } catch (error) {
                         res.status(500).json({ resultado: 'error', datos: error });
@@ -312,6 +314,28 @@ app.post('/acopiar',
                     res.status(500).json({ resultado: 'error', datos: error });
                 });
         }
+    });
+
+app.post('/poracopiar',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.porAcopiarPendienteWeb(sql)
+            .then(function(data) {
+                // console.log("/acopios ", data);
+                try {
+                    if (data.length === 0) {
+                        res.json({ resultado: "nodata", datos: '' });
+                    } else if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
     });
 
 app.get('/tipopago',
@@ -397,10 +421,47 @@ app.post('/grabarEncomienda',
             });
     });
 
-app.post('/estado_pqt',
+app.post('/borrar_pqt',
     function(req, res) {
         //
         console.log(req.body);
+        servicios.borrarEncomienda(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.get('/estados',
+    function(req, res) {
+        //
+        console.log('/estados ', req.body);
+        servicios.Estados(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/estado_pqt',
+    function(req, res) {
+        //
+        // app.get('/estado_pqt',
+        // body = JSON.parse(req.query.param);
+        // servicios.dondeEstas(sql, body)
+        //
         servicios.dondeEstas(sql, req.body)
             .then(function(data) {
                 try {
@@ -414,11 +475,12 @@ app.post('/estado_pqt',
             });
     });
 
-app.post('/borrar_pqt',
+app.post('/grabarEstados',
     function(req, res) {
         //
-        console.log(req.body);
-        servicios.borrarEncomienda(sql, req.body)
+        // console.log(req.body);
+        //
+        servicios.updateEstados(sql, req.body)
             .then(function(data) {
                 try {
                     res.json({ resultado: "ok", datos: data });

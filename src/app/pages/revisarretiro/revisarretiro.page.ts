@@ -10,9 +10,8 @@ import { DatosService } from '../../services/datos.service';
 export class RevisarretiroPage implements OnInit {
 
   @Input() item;
-  @Input() acopio;
+  @Input() titulo;
 
-  titulo = '';
   foto = null;
   cargando = false;
 
@@ -20,9 +19,7 @@ export class RevisarretiroPage implements OnInit {
                private alertCtrl: AlertController,
                private datos: DatosService ) { }
 
-  ngOnInit() {
-    this.titulo = ( this.acopio === true ) ? 'Pendiente de acopiar' : 'Retiro Pendiente';
-  }
+  ngOnInit() {}
 
   salir() {
     this.modalCtrl.dismiss();
@@ -30,12 +27,12 @@ export class RevisarretiroPage implements OnInit {
 
   async retirar() {
     const alert = await this.alertCtrl.create({
-      header: 'Yo voy a retirarla...',
-      message: 'Al aceptar esta opción, el sistema iniciará el tracking del despacho y le asignará este retiro de encomienda.<br><br><strong>Está seguro ?</strong>',
+      header: 'Yo voy a retirar...',
+      message: 'Al aceptar esta opción, el sistema iniciará el tracking del retiro y le asignará esta encomienda.<br><br><strong>Está seguro ?</strong>',
       mode: 'ios',
       buttons: [
         {
-          text: 'No',
+          text: 'No, abandonar',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {}

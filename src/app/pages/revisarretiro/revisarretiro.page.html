@@ -11,9 +11,12 @@
 
 <ion-content>
 
-    <ion-card class="welcome-card">
-        <img src="assets/images/revisaretiro2.jpg" alt="x1">
+    <ion-button class="botonlisto" expand="block" size="small" share="round" color="danger" (click)="retirar()">
+        Yo retiraré esta encomienda
+    </ion-button>
 
+    <ion-card class="welcome-card">
+        <!-- <img src="assets/images/revisaretiro2.jpg" alt="x1"> -->
         <ion-card-header>
             <ion-card-title>Origen cargo</ion-card-title>
         </ion-card-header>
@@ -50,7 +53,8 @@
                 </b>
             </ion-label>
         </ion-card-content>
-
+    </ion-card>
+    <ion-card class="welcome-card">
         <ion-card-header>
             <ion-card-title>Destino cargo</ion-card-title>
         </ion-card-header>
@@ -72,11 +76,6 @@
                 </b>
             </ion-label>
         </ion-card-content>
-
     </ion-card>
-
-    <ion-button expand="block" size="small" share="round" color="danger" (click)="retirar()" style="font-size: 80%;margin-top: 15px;padding-left: 20px;padding-right:20px">
-        Yo retiraré esta encomienda
-    </ion-button>
 
 </ion-content>

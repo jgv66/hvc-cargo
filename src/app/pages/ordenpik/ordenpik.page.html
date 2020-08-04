@@ -39,22 +39,20 @@
             <ion-item *ngFor="let item of retiros; let i = index;" [detail]=" !reordenando " (click)="retirar( item, i )">
                 <ion-label *ngIf=" reordenando ">
                     <b>
-                      <h2 class="rojo"><ion-icon slot="start" name="person-outline"></ion-icon>
-                          {{ item.cli_razon }}
-                      </h2>
-                      <p><ion-icon slot="start" name="location-outline"></ion-icon>
+                      <h2 class="rojo">(#{{item.id_paquete}}) {{ item.cli_razon }}</h2>
+                    <p>
+                        <ion-icon slot="start" name="location-outline"></ion-icon>
                         {{ item.cli_direccion }}
-                      </p>
-                      <p><ion-icon slot="start" name="earth-outline"></ion-icon>
+                    </p>
+                    <p>
+                        <ion-icon slot="start" name="earth-outline"></ion-icon>
                         {{ item.cli_comuna }}, {{ item.cli_ciudad }}
                     </p>
-                  </b>
+                    </b>
                 </ion-label>
                 <ion-label *ngIf=" !reordenando ">
                     <b>
-                      <h2 class="rojo"><ion-icon slot="start" name="person-outline"></ion-icon>
-                          {{ item.cli_razon }}
-                      </h2>
+                      <h2 class="rojo">(#{{item.id_paquete}}) {{ item.cli_razon }}</h2>
                       <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
                           {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
                       </p>

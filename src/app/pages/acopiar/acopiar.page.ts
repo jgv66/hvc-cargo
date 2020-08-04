@@ -34,7 +34,7 @@ export class AcopiarPage implements OnInit {
     this.cargando = true;
     this.datos.servicioWEB( '/acopiar', { ficha: this.datos.ficha } )
         .subscribe( (dev: any) => {
-            // console.log(dev);
+            console.log(dev);
             this.cargando = false;
             if ( dev.resultado === 'error' ) {
               this.funciones.msgAlert( 'ATENCION', 'No existen itemes para acopiar.' );
@@ -48,7 +48,9 @@ export class AcopiarPage implements OnInit {
             }
         },
         (error) => {
-          this.funciones.msgAlert( 'ATENCION', error );
+          this.cargando = false;
+          console.log(error);
+          this.funciones.msgAlert( '', error );
         });
   }
 

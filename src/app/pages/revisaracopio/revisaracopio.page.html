@@ -20,34 +20,41 @@
         <ion-card-content style="padding-top: 5px;">
             <ion-label>
                 <b>
-                  <h2 style="font-weight: bold;"><ion-icon slot="start" name="person-outline"></ion-icon>
-                      {{ item.cli_razon }}
-                  </h2>
-                  <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
-                      {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
-                  </p>
-                  <p><ion-icon slot="start" name="hand-left-outline"></ion-icon>
-                      {{ item.contacto }}
-                  </p>
-                  <p><ion-icon slot="start" name="basket-outline"></ion-icon>
-                      {{ item.obs_carga }}
-                  </p>
-                  <p><ion-icon slot="start" name="cube-outline"></ion-icon>
-                      Bultos: {{ item.bultos }}  Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}
-                  </p>
-                  <p class="verde"><ion-icon slot="start" name="cash-outline"></ion-icon>
-                      {{ item.tipo_pago }} {{ item.desc_pago }}
-                  </p>
-                  <p><ion-icon slot="start" name="calendar-outline"></ion-icon>
-                      In: {{ item.fecha_creacion }} - Out: {{ item.fecha_prometida }}
-                  </p>
-                  <p><ion-icon slot="start" name="call-outline"></ion-icon>
-                      <a href="tel:{{ item.cli_fono1 }}" style="padding-left: 5px;">{{ item.cli_fono1 }}</a>
-                  </p>
-                  <p><ion-icon slot="start" name="bandage-outline"></ion-icon>
-                      {{ item.cli_referencias }}
-                  </p>
-              </b>
+                  <h2 style="font-weight: bold;"><b>(# {{ item.id_paquete }})</b> {{ item.cli_razon }}
+                </h2>
+                <p class="rojo">
+                    <ion-icon slot="start" name="location-outline"></ion-icon>
+                    {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
+                </p>
+                <p>
+                    <ion-icon slot="start" name="hand-left-outline"></ion-icon>
+                    {{ item.contacto }}
+                </p>
+                <p>
+                    <ion-icon slot="start" name="basket-outline"></ion-icon>
+                    {{ item.obs_carga }}
+                </p>
+                <p>
+                    <ion-icon slot="start" name="cube-outline"></ion-icon>
+                    Bultos: {{ item.bultos }} Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}
+                </p>
+                <p class="verde">
+                    <ion-icon slot="start" name="cash-outline"></ion-icon>
+                    {{ item.tipo_pago }} {{ item.desc_pago }}
+                </p>
+                <p>
+                    <ion-icon slot="start" name="calendar-outline"></ion-icon>
+                    In: {{ item.fecha_creacion }} - Out: {{ item.fecha_prometida }}
+                </p>
+                <p>
+                    <ion-icon slot="start" name="call-outline"></ion-icon>
+                    <a href="tel:{{ item.cli_fono1 }}" style="padding-left: 5px;">{{ item.cli_fono1 }}</a>
+                </p>
+                <p>
+                    <ion-icon slot="start" name="bandage-outline"></ion-icon>
+                    {{ item.cli_referencias }}
+                </p>
+                </b>
             </ion-label>
         </ion-card-content>
 

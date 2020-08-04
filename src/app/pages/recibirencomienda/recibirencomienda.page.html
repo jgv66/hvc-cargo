@@ -25,7 +25,7 @@
         </ion-list-header>
         <ion-item *ngFor="let item of retiros; let i = index;" detail (click)="revisar( item, i )">
             <ion-label>
-                <h2 style="font-weight: bold; color: red">{{ item.cli_razon }}</h2>
+                <h2 style="font-weight: bold; color: red"><b>(#{{ item.id_paquete}})</b> {{ item.cli_razon }}</h2>
                 <b>
                 <p>{{ item.cli_direccion }}, {{ item.cli_comuna}}, {{ item.cli_ciudad }}</p>
                 <p>Destinatario : {{ item.des_razon }}</p>

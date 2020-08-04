@@ -22,7 +22,7 @@ export class RevisaracopioPage implements OnInit {
                private datos: DatosService ) { }
 
   ngOnInit() {
-    this.titulo = 'Pendiente de acopiar';
+    this.titulo = 'Sin acopiar';
     this.cargarFoto();
   }
 
