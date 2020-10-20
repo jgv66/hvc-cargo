@@ -27,7 +27,7 @@
 
     <ion-list *ngIf=" segmento === 'retiroOK' " class="animated fadeIn" lines="none" style="margin-top:5px;">
 
-        <ion-list-header style="margin-top:5px; margin-bottom:10px">
+        <ion-list-header style="margin-top:5px; margin-bottom:10px;height: 60px;">
             <ion-label><b>
                 <div *ngIf=" item.tipo_pago === 'PRE-PAGO' ">
                     <h1 class="rojo ion-text-center">{{ item.tipo_pago }} ${{ item.valor_cobrado | number:"1.0-0" }}.-</h1>
@@ -39,35 +39,35 @@
             </b></ion-label>
         </ion-list-header>
 
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-checkbox color="mango" slot="start" name="it[0]" [(ngModel)]="it[0]"></ion-checkbox>
             <ion-label>{{ item.cli_razon }}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-checkbox color="mango" slot="start" name="it[1]" [(ngModel)]="it[1]"></ion-checkbox>
             <ion-label>{{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-checkbox color="mango" slot="start" name="it[2]" [(ngModel)]="it[2]"></ion-checkbox>
             <ion-label>{{ item.obs_carga }}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-checkbox color="mango" slot="start" name="it[3]" [(ngModel)]="it[3]"></ion-checkbox>
             <ion-label>Bultos: {{ item.bultos }}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-checkbox color="mango" slot="start" name="it[4]" [(ngModel)]="it[4]"></ion-checkbox>
             <ion-label>Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}</ion-label>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-label style="margin-left: 3px;" position="staked">Nro.de Documento:</ion-label>
             <ion-input type="text" name="nroDocumento" [(ngModel)]="nroDocumento"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item style="height: 40px;">
             <ion-label position="stacked">Observaciones al retirar</ion-label>
-            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="item.obs_pickeo" [(ngModel)]="item.obs_pickeo"></ion-textarea>
+            <ion-textarea rows="2" placeholder="Sus comentarios aquí..." name="item.obs_pickeo" [(ngModel)]="item.obs_pickeo"></ion-textarea>
         </ion-item>
-        <ion-card *ngIf=" foto " class="fotocard">
+        <ion-card *ngIf=" foto " class="picker">
             <img [src]="foto">
             <ion-card-content style="margin-bottom: 0px;">
                 <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -300px;">

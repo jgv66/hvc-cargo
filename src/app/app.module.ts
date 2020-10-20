@@ -20,6 +20,7 @@ import { DatosService } from './services/datos.service';
 import { FiltrarPipe } from './pipes/filtrar.pipe';
 
 import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     BarcodeScanner,
     OpenNativeSettings,
+    BluetoothSerial
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { DatosService } from '../../services/datos.service';
+import { PrintService } from '../../services/printer.service';
 
 const IMG_URL = 'http://23.239.29.171:3055/public/img/';
 
@@ -19,11 +20,17 @@ export class RevisaracopioPage implements OnInit {
 
   constructor( private modalCtrl: ModalController,
                private alertCtrl: AlertController,
+               private printer: PrintService,
                private datos: DatosService ) { }
 
   ngOnInit() {
     this.titulo = 'Sin acopiar';
+    this.printer.listPrinter();
     this.cargarFoto();
+  }
+
+  ImprimeEncomienda() {
+    this.printer.ImprimirPicking( this.item );
   }
 
   salir() {

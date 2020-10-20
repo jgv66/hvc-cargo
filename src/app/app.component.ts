@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Platform, ToastController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Plugins } from '@capacitor/core';
+import { Plugins, Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +29,13 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      // if ( Capacitor.isPluginAvailable('SplashScreen') ) {
+      //   Plugins.SplashScreen.hide();
+      // }
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       // this.revisarDarkTheme();
-      setTimeout(() => this.splashScreen.hide(), 500)
+      setTimeout(() => this.splashScreen.hide(), 500);
     });
   }
 

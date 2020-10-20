@@ -52,6 +52,7 @@ app.post('/usr',
         console.log(req.body);
         servicios.validaUsuario(sql, req.body)
             .then(function(data) {
+                console.log('/usr', data);
                 try {
                     if (data[0].resultado === true) {
                         res.json({ resultado: "ok", datos: data });
@@ -59,7 +60,7 @@ app.post('/usr',
                         res.json({ resultado: "nodata", datos: '' });
                     }
                 } catch (error) {
-                    res.status(500).json({ resultado: 'error', datos: 'Usuario no existe. Corrija o verifique, luego reintente.' });
+                    res.json({ resultado: 'error', datos: 'Usuario/Clave no existe. Corrija o verifique, luego reintente.' });
                 }
             })
             .catch(function(error) {
@@ -106,11 +107,12 @@ app.post('/pickpend',
         //
         console.log(req.body);
         if (req.body.todos !== undefined) {
-            servicios.pickeoPendienteWeb(sql, req.body)
+            // servicios.pickeoPendienteWeb(sql, req.body)
+            servicios.sinTransportar(sql, req.body)
                 .then(function(data) {
                     // console.log("/pickpend ", data);
                     try {
-                        if (data[0].resultado === true) {
+                        if (data.length > 0 && data[0].resultado === true) {
                             res.json({ resultado: "ok", datos: data });
                         } else {
                             res.json({ resultado: "nodata", datos: '' });
@@ -217,7 +219,9 @@ app.post('/imgUpload', type,
         //
         var nombre_completo = CARPETA_IMG + req.body.name;
         /** A better way to copy the uploaded file. **/
+        console.log('/imgUpload', req.body.foto);
         var data = req.body.foto.split(';base64,').pop();
+        console.log('/imgUpload', data);
         fs.writeFile(nombre_completo, data, { encoding: 'base64' }, function(err) {
             if (err) {
                 return res.status(500).json({ resultado: 'error', mensaje: err });
@@ -225,6 +229,8 @@ app.post('/imgUpload', type,
                 servicios.saveIMG(sql, req.body.name, req.body.extension, req.body.id_pqt);
                 return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen fue grabada.' });
             }
+        }).catch(err => {
+            console.log('/imgUpload ERROR-> ', err);
         });
     });
 
@@ -278,12 +284,11 @@ app.post('/acopiar',
         //
         console.log('/acopiar', req.body);
         if (req.body.todos !== undefined) {
-            console.log(1111);
             servicios.enAcopioPendienteWeb(sql, req.body)
                 .then(function(data) {
                     // console.log("/acopios ", data);
                     try {
-                        if (data.length === 0) {
+                        if (data.length === 0 || data[0].resultado === false) {
                             res.json({ resultado: "nodata", datos: '' });
                         } else if (data[0].resultado === true) {
                             res.json({ resultado: "ok", datos: data });
@@ -296,12 +301,11 @@ app.post('/acopiar',
                     res.status(500).json({ resultado: 'error', datos: error });
                 });
         } else {
-            console.log(22222);
             servicios.acopioPendiente(sql, req.body)
                 .then(function(data) {
-                    // console.log("/acopios ", data);
+                    console.log("/acopios ", data);
                     try {
-                        if (data.length === 0) {
+                        if (data.length === 0 || data[0].resultado === false) {
                             res.json({ resultado: "nodata", datos: '' });
                         } else if (data[0].resultado === true) {
                             res.json({ resultado: "ok", datos: data });
@@ -458,10 +462,6 @@ app.get('/estados',
 app.post('/estado_pqt',
     function(req, res) {
         //
-        // app.get('/estado_pqt',
-        // body = JSON.parse(req.query.param);
-        // servicios.dondeEstas(sql, body)
-        //
         servicios.dondeEstas(sql, req.body)
             .then(function(data) {
                 try {
@@ -481,6 +481,60 @@ app.post('/grabarEstados',
         // console.log(req.body);
         //
         servicios.updateEstados(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/dameMasivo',
+    function(req, res) {
+        //
+        console.log(req.body);
+        //
+        servicios.dameMasivos(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/dameEncomiendas',
+    function(req, res) {
+        //
+        console.log(req.body);
+        //
+        servicios.dameEncomiendas(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/dameEncomiendasbyID',
+    function(req, res) {
+        //
+        console.log(req.body);
+        //
+        servicios.dameEncomiendasbyID(sql, req.body)
             .then(function(data) {
                 try {
                     res.json({ resultado: "ok", datos: data });

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { DatosService } from '../../services/datos.service';
 import { FuncionesService } from '../../services/funciones.service';
 import { PickingPage } from '../picking/picking.page';
+import { PrintService } from '../../services/printer.service';
 
 @Component({
   selector: 'app-ordenpik',
@@ -21,6 +22,7 @@ export class OrdenpikPage implements OnInit {
 
   constructor( public datos: DatosService,
                private funciones: FuncionesService,
+               private printer: PrintService,
                private router: Router,
                private alertCtrl: AlertController,
                private modalCtrl: ModalController ) { }
@@ -29,10 +31,13 @@ export class OrdenpikPage implements OnInit {
     if ( this.datos.ficha === undefined ) {
       this.router.navigate(['/home']);
     }
+    this.printer.listPrinter();
   }
+
   ionViewWillEnter() {
     this.cargarDatos();
   }
+
   cargarDatos( event? ) {
     this.cargando = true;
     this.datos.servicioWEB( '/misretiros', { ficha: this.datos.ficha } )
@@ -106,6 +111,10 @@ export class OrdenpikPage implements OnInit {
     event.detail.complete();
   }
 
+  // ImprimeEncomienda( item ) {
+  //   this.printer.ImprimirPicking( item );
+  // }
+
   async retirar( item, pos ) {
     const modal = await this.modalCtrl.create({
       component: PickingPage,
@@ -129,7 +138,9 @@ export class OrdenpikPage implements OnInit {
             if ( dev.resultado === 'ok' ) {
               this.retiros.splice( pos, 1 );
               this.funciones.muestraySale( 'Retiro se grabó.', 1, 'middle' );
-              // this.rescatar(item);
+              // impresion
+              this.printer.ImprimirPicking( item );
+              //
             } else {
               this.funciones.msgAlert('', dev.datos);
             }

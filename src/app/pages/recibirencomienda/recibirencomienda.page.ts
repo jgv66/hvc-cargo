@@ -69,7 +69,7 @@ export class RecibirencomiendaPage implements OnInit {
       this.datos.servicioWEB( '/yoLoRetiro', { ficha: this.datos.ficha, id: item.id_paquete } )
           .subscribe( (dev: any) => {
             this.cargando = false;
-            console.log(dev);
+            // console.log(dev);
             if ( dev.resultado === 'ok' ) {
               this.retiros.splice( pos, 1 );
               this.funciones.muestraySale( dev.datos[0].mensaje, 1, 'middle' );

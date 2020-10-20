@@ -6,6 +6,11 @@
             </ion-button>
         </ion-buttons>
         <ion-title>{{ titulo }}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="ImprimeEncomienda()">
+                <ion-icon slot="icon-only" name="print-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 

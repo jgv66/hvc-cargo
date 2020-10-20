@@ -36,6 +36,7 @@
 
         <ion-reorder-group [disabled]=" !reordenando " (ionItemReorder)="reorder( $event )">
 
+            <!-- <ion-item *ngFor="let item of retiros; let i = index;" [detail]=" !reordenando " (click)="ImprimeEncomienda( item )"> -->
             <ion-item *ngFor="let item of retiros; let i = index;" [detail]=" !reordenando " (click)="retirar( item, i )">
                 <ion-label *ngIf=" reordenando ">
                     <b>

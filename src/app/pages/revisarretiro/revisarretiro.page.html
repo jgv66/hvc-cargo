@@ -6,14 +6,25 @@
             </ion-button>
         </ion-buttons>
         <ion-title>{{ titulo }}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="ImprimeEncomienda()">
+                <ion-icon slot="icon-only" name="print-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-    <ion-button class="botonlisto" expand="block" size="small" share="round" color="danger" (click)="retirar()">
-        Yo retiraré esta encomienda
-    </ion-button>
+    <ion-grid fixed>
+        <ion-row>
+            <ion-col size="12">
+                <ion-button class="botonlisto" expand="block" share="round" color="danger" (click)="retirar()">
+                    Yo retiraré esta encomienda
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
     <ion-card class="welcome-card">
         <!-- <img src="assets/images/revisaretiro2.jpg" alt="x1"> -->

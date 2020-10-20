@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { DatosService } from '../../services/datos.service';
+import { PrintService } from '../../services/printer.service';
 
 @Component({
   selector: 'app-revisarretiro',
@@ -16,13 +16,19 @@ export class RevisarretiroPage implements OnInit {
   cargando = false;
 
   constructor( private modalCtrl: ModalController,
-               private alertCtrl: AlertController,
-               private datos: DatosService ) { }
+               private printer: PrintService,
+               private alertCtrl: AlertController ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.printer.listPrinter();
+  }
 
   salir() {
     this.modalCtrl.dismiss();
+  }
+
+  ImprimeEncomienda() {
+    this.printer.ImprimirPicking( this.item );
   }
 
   async retirar() {
