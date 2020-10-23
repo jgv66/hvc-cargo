@@ -111,14 +111,15 @@ export class PrintService {
     receipt += 'Bultos : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.bultos.toString() + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += 'Peso   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.peso.toString() + 'Kg.' + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += 'Volumen: ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.volumen.toString() + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
-    if ( item.tipo_pago === 'PRE-PAGO' ) {
-      receipt += 'Pago   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.tipo_pago + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
-      receipt += 'Tipo   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.desc_pago + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
-      receipt += 'Cobrar : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + '$' + item.valor_cobrado.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
-    } else {
-      receipt += 'Pago   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.tipo_pago + ',' + item.desc_pago + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
-    }
     receipt += 'Fono   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.cli_fono1 + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL;
+    // --------
+    receipt += commands.TEXT_FORMAT.TXT_2WIDTH + commands.TEXT_FORMAT.TXT_ALIGN_CT + commands.TEXT_FORMAT.TXT_BOLD_ON;
+    receipt += 'PAGO' ;
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL + commands.TEXT_FORMAT.TXT_ALIGN_LT + commands.EOL + commands.EOL;
+    receipt += 'Pago   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.tipo_pago + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += 'Tipo   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.desc_pago + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += 'Cobrar : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + '$' + item.valor_cobrado.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL;
     // --------
     receipt += commands.TEXT_FORMAT.TXT_2WIDTH + commands.TEXT_FORMAT.TXT_ALIGN_CT + commands.TEXT_FORMAT.TXT_BOLD_ON;
@@ -152,7 +153,7 @@ export class PrintService {
 
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;  // Select justification: Centering
     receipt += '\x1d\x68\x50';  // Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
-    receipt += '\x1d\x77\x04';  // Set barcode width
+    receipt += '\x1d\x77\x03';  // Set barcode width
     receipt += '\x1d\x48\x02';  // Select print position of HRI characters: Print position, below the barcode
     receipt += '\x1d\x66\x02';  // Select font for HRI characters: Font B
     receipt += '\x1d\x6b\x04';  // Print barcode: (A) format, barcode system = CODE39
