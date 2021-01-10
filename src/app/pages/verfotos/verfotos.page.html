@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Fotos de Encomienda</ion-title>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row style="max-height: 42px;margin-top:10px;">
+            <ion-col size="9" style="max-height: 40px;top:-14px;">
+                <ion-searchbar class="buscar" mode="ios" animated="true" search-icon="x" type="number" name="id" [(ngModel)]="id" showCancelButton="focus" cancelButtonText=" " placeholder="Nro. de la encomienda..."></ion-searchbar>
+            </ion-col>
+            <ion-col size="3" style="height: 32px; padding-top: 0px;">
+                <ion-button size="small" expand="block" (click)="aBuscarFotos()" style="height:32px;" color="mango">
+                    Buscar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-list lines="none">
+        <ion-item *ngFor="let foto of fotos">
+            <ion-card style="margin-top: 20px;" mode="ios">
+                <img [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <ion-label>Fecha: {{ foto.fecha }} Hora: {{ foto.hora }}</ion-label>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

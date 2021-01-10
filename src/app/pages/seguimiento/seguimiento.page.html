@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Seguimiento</ion-title>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row style="max-height: 42px;margin-top:10px;">
+            <ion-col size="9" style="max-height: 40px;top:-14px;">
+                <ion-searchbar class="buscar" mode="ios" animated="true" search-icon="x" type="number" name="id" [(ngModel)]="id" showCancelButton="focus" cancelButtonText=" " placeholder="Nro. de la encomienda..."></ion-searchbar>
+            </ion-col>
+            <ion-col size="3" style="height: 32px; padding-top: 0px;">
+                <ion-button size="small" expand="block" (click)="aBuscarEncomienda()" style="height:32px;" color="mango">
+                    Buscar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Tire para refrescar" refreshingSpinner="circles" refreshingText="Actualizando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card styule="margin-top: 10px;margin-bottom: 5px;">
+        <img src="assets/images/entrega-002.png" alt="x1">
+    </ion-card>
+
+    <ion-list>
+        <ion-list-header mode="ios">
+            <ion-label>Seguimiento de encomienda</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let item of itemes" detail (click)="revisaFoto()">
+            <ion-label>
+                <h2 style="font-weight: bold; color: red"><b>Fecha: {{ item.fecha }}</b> Hora: {{ item.hora }}</h2>
+                <b><p>{{ item.nombre }}: {{ item.comentario }}</p></b>
+            </ion-label>
+            <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

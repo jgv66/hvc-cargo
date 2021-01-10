@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { AcopiarPageRoutingModule } from './acopiar-routing.module';
 
 import { AcopiarPage } from './acopiar.page';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipesModule,
     AcopiarPageRoutingModule
   ],
   declarations: [AcopiarPage]

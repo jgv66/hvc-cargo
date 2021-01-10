@@ -15,6 +15,8 @@ export class AcopiarPage implements OnInit {
   acopios = [];
   cargando = false;
   reordenando = false;
+  buscando = false;
+  textoBuscar;
 
   constructor( public datos: DatosService,
                private funciones: FuncionesService,
@@ -28,6 +30,10 @@ export class AcopiarPage implements OnInit {
   }
   ionViewWillEnter() {
     this.cargarDatos();
+  }
+
+  onSearchCange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   cargarDatos( event? ) {

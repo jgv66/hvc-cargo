@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Entregas</ion-title>
+    </ion-toolbar>
+    <ion-searchbar mode="ios" [debounce]="500" placeholder="Digite aquí lo que busca..." animated inputmode="text" (ionChange)="onSearchCange($event)"></ion-searchbar>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Tire para refrescar" refreshingSpinner="circles" refreshingText="Actualizando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card style="margin-top: 5px; margin-bottom: 5px;">
+        <img src="assets/images/entrega-001.png" alt="x1">
+    </ion-card>
+
+    <ion-list>
+        <ion-list-header mode="ios">
+            <ion-label>Pendientes de Entregar</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let item of entregas | filtro: textoBuscar ; let i = index;" detail (click)="revisar( item, i )">
+            <ion-label>
+                <h2 style="font-weight: bold; color: red"><b>(#{{ item.id_paquete}})</b> {{ item.des_razon }}</h2>
+                <b>
+              <p class="ion-text-wrap">{{ item.des_direccion }}, {{ item.des_comuna}}, {{ item.des_ciudad }}</p>
+              <p *ngIf="item.des_fono1">Fonos: {{ item.des_fono1 }}</p>
+              <p class="medio">Origen : {{ item.cli_razon }}</p>
+              <p class="medio">Ingreso : {{ item.fecha_creacion }} - Solicitado : {{ item.fecha_prometida }}</p>
+          </b>
+            </ion-label>
+            <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

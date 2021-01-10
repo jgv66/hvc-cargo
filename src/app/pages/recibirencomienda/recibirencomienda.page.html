@@ -5,6 +5,7 @@
         </ion-buttons>
         <ion-title>Retiros</ion-title>
     </ion-toolbar>
+    <ion-searchbar mode="ios" [debounce]="500" placeholder="Digite aquí lo que busca..." animated inputmode="text" (ionChange)="onSearchCange($event)"></ion-searchbar>
 </ion-header>
 <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
 
@@ -15,7 +16,7 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <ion-card class="welcome-card">
+    <ion-card>
         <img src="assets/images/mispdf.jpg" alt="x1">
     </ion-card>
 
@@ -23,7 +24,7 @@
         <ion-list-header mode="ios">
             <ion-label class="mg-cero">Pendientes de retirar</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let item of retiros; let i = index;" detail (click)="revisar( item, i )">
+        <ion-item *ngFor="let item of retiros | filtro: textoBuscar ; let i = index;" detail (click)="revisar( item, i )">
             <ion-label>
                 <h2 style="font-weight: bold; color: red"><b>(#{{ item.id_paquete}})</b> {{ item.cli_razon }}</h2>
                 <b>

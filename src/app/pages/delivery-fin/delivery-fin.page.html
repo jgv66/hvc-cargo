@@ -1,0 +1,151 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Entrega #{{ item.id_paquete }}</ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button (click)="opcionesFoto( $event )">
+                <ion-icon slot="icon-only" size="large" name="camera-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="animated fadeIn">
+
+    <ion-segment color="tertiary" mode="ios" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="entregaOK">
+            <ion-label>Entrega OK</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="retiroBAD">
+            <ion-label>Problemas</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+
+    <ion-list *ngIf=" segmento === 'entregaOK' " class="animated fadeIn" lines="none" style="margin-top:5px;">
+
+        <ion-list-header style="margin-top:5px; margin-bottom:10px;height: 60px;">
+            <ion-label><b>
+              <div *ngIf=" item.tipo_pago === 'POR PAGAR' ">
+                  <h1 class="rojobold ion-text-center">{{ item.tipo_pago }} ${{ item.valor_cobrado | number:"1.0-0" }}.-</h1>                  
+                  <p class="rojobold ion-text-center"> {{ item.desc_pago }}</p>
+                </div>
+              <div *ngIf=" item.tipo_pago !== 'POR PAGAR' ">
+                  <h1 class="ion-text-center">{{ item.tipo_pago }}</h1>
+                  <p class="ion-text-center"> {{ item.desc_pago }}</p>
+                </div>
+          </b></ion-label>
+        </ion-list-header>
+
+        <ion-item style="height: 40px;">
+            <ion-checkbox color="mango" slot="start" name="it[0]" [(ngModel)]="it[0]"></ion-checkbox>
+            <ion-label>{{ item.des_razon }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-checkbox color="mango" slot="start" name="it[1]" [(ngModel)]="it[1]"></ion-checkbox>
+            <ion-label class="ion-text-wrap">{{ item.des_direccion }}, {{ item.des_comuna }}, {{ item.des_ciudad }}</ion-label>
+        </ion-item>
+        <ion-item style="height: 40px;">
+            <ion-checkbox color="mango" slot="start" name="it[2]" [(ngModel)]="it[2]"></ion-checkbox>
+            <ion-label>{{ item.obs_carga }}</ion-label>
+        </ion-item>
+        <ion-item style="height: 40px;">
+            <ion-checkbox color="mango" slot="start" name="it[3]" [(ngModel)]="it[3]"></ion-checkbox>
+            <ion-label>Bultos: {{ item.bultos }}</ion-label>
+        </ion-item>
+        <ion-item style="height: 40px;">
+            <ion-checkbox color="mango" slot="start" name="it[4]" [(ngModel)]="it[4]"></ion-checkbox>
+            <ion-label>Peso: {{ item.peso }}Kg. Volumen: {{ item.volumen }}</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Observaciones al entregar</ion-label>
+            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="item.recep_obs" [(ngModel)]="item.recep_obs"></ion-textarea>
+        </ion-item>
+        <ion-card style="margin-top: 20px;">
+            <ion-card-header>
+                <ion-card-title>Otra persona recibe</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item>
+                    <ion-label>Receptor </ion-label>
+                    <ion-input class="ion-text-right" type="text" placeholder="Nombre receptor..." nane="receptor" [(ngModel)]="receptor"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Rut </ion-label>
+                    <ion-input class="ion-text-right" type="text" placeholder="Rut receptor..." nane="rut" [(ngModel)]="rut"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Parentezco </ion-label>
+                    <ion-input class="ion-text-right" type="text" placeholder="Parentezco receptor..." nane="relacion" [(ngModel)]="relacion"></ion-input>
+                </ion-item>
+            </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf=" foto " style="margin-top: 20px;">
+            <ion-img [src]="foto" alt="imágenes rescatadas" class="picker"></ion-img>
+            <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -72px;">
+                <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
+            </ion-button>
+        </ion-card>
+        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
+            <ion-col size="4">
+                <ion-button expand="block" size="small" share="round" color="" (click)="salir()">
+                    Abandonar
+                </ion-button>
+            </ion-col>
+            <ion-col size="8">
+                <ion-button expand="block" size="small" share="round" color="mango" (click)="entregar()">
+                    Entregar encomienda
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-list>
+
+    <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
+        <ion-list-header style="margin-top:5px; margin-bottom:10px">
+            <ion-label>
+                <b>
+              <h1 class="rojo ion-text-center">Problemas con la entrega</h1>
+              </b>
+            </ion-label>
+        </ion-list-header>
+        <ion-radio-group name="queprobl" [(ngModel)]="queprobl" value="910">
+            <ion-item>
+                <ion-radio slot="start" value="910"></ion-radio>
+                <ion-label>Destinatario no encontrado</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-radio slot="start" value="920"></ion-radio>
+                <ion-label>Direccion incorrecta</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-radio slot="start" value="930"></ion-radio>
+                <ion-label>Sin dinero para recepcionar (${{ item.valor_cobrado | number:"1.0-0" }}.-)</ion-label>
+            </ion-item>
+        </ion-radio-group>
+        <ion-item>
+            <ion-label position="stacked">Observaciones al problema</ion-label>
+            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="obsProblema" [(ngModel)]="obsProblema"></ion-textarea>
+        </ion-item>
+        <ion-card *ngIf=" foto " style="margin-top: 20px;">
+            <ion-img [src]="foto" alt="imágenes rescatadas" class="picker"></ion-img>
+            <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -72px;">
+                <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
+            </ion-button>
+        </ion-card>
+        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
+            <ion-col size="12">
+                <ion-button expand="block" size="small" share="round" color="danger" (click)="problemas()">
+                    <ion-icon slot="start" name="rainy-outline"></ion-icon>
+                    Guardar los problemas de la entrega
+                </ion-button>
+            </ion-col>
+        </ion-row>
+
+    </ion-list>
+
+</ion-content>

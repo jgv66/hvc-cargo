@@ -111,10 +111,6 @@ export class OrdenpikPage implements OnInit {
     event.detail.complete();
   }
 
-  // ImprimeEncomienda( item ) {
-  //   this.printer.ImprimirPicking( item );
-  // }
-
   async retirar( item, pos ) {
     const modal = await this.modalCtrl.create({
       component: PickingPage,
@@ -139,13 +135,32 @@ export class OrdenpikPage implements OnInit {
               this.retiros.splice( pos, 1 );
               this.funciones.muestraySale( 'Retiro se grabó.', 1, 'middle' );
               // impresion
-              this.printer.ImprimirPicking( item );
+              this.decideImprimir( item );
               //
             } else {
               this.funciones.msgAlert('', dev.datos);
             }
         });
     }
+  }
+
+  async decideImprimir( item ) {
+    const alert = await this.alertCtrl.create({
+      message: 'Desea imprimir el voucher de retiro?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Sí, imprimir!',
+          handler: () => { this.printer.ImprimirPicking( item );; }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 }

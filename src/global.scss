@@ -117,3 +117,13 @@ img.kntk {
     -webkit-animation-name: flash;
     animation-name: flash;
 }
+
+ion-searchbar {
+    --box-shadow: none !important;
+}
+
+// Ajuste de ancho para los selects
+.popover-content {
+    min-width: fit-content;
+    width: auto !important;
+}

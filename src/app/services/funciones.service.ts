@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
+import { Plugins, FilesystemDirectory, CameraPhoto } from '@capacitor/core';
+//
+const { Camera, Filesystem } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +11,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class FuncionesService {
 
   constructor(private alertCtrl: AlertController,
+              private platform: Platform,
               private toastCtrl: ToastController) { }
 
   textoSaludo() {
@@ -161,5 +166,48 @@ export class FuncionesService {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   }
+
+  // Save picture to file on device
+  async savePicture(cameraPhoto: CameraPhoto, item, alias ) {
+    // Convert photo to base64 format, required by Filesystem API to save
+    const base64Data = await this.readAsBase64(cameraPhoto);
+    // const imageName  = item.id_paquete.toString() +'_'+ new Date().getTime() + '.jpeg';
+    const imageName  = item.id_paquete.toString() + alias + '.jpeg';
+    const formato    = 'jpeg';
+    // console.log( imageName, formato, base64Data );
+    //
+    if (this.platform.is('hybrid')) {
+      return { base64Data, imageName, formato };
+    }
+    else {
+      return { base64Data, imageName, formato };
+    }
+  }
+  
+  private async readAsBase64(cameraPhoto: CameraPhoto) {
+    // "hybrid" will detect Cordova or Capacitor
+    if (this.platform.is('hybrid')) {
+      // Read the file into base64 format
+      const file = await Filesystem.readFile({
+        path: cameraPhoto.path
+      });
+        return file.data;
+    }
+    else {
+      // Fetch the photo, read as a blob, then convert to base64 format
+      const response = await fetch(cameraPhoto.webPath);
+      const blob = await response.blob();
+        return await this.convertBlobToBase64(blob) as string;
+    }
+  }
+
+  convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader;
+    reader.onerror = reject;
+    reader.onload = () => {
+        resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
 
 }

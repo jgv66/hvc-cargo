@@ -39,10 +39,10 @@ export class DatosService {
 
   uploadImage( imgb64, name, ext, idPaquete ) {
     //
-    const url = this.url + '/imgUpload';
+    const url = this.url + '/imgUp';
     //
     const formData = new FormData();
-    formData.append('foto',      imgb64 );
+    formData.append('foto64',    imgb64 );
     formData.append('name',      name);
     formData.append('extension', ext);
     formData.append('id_pqt',    idPaquete );

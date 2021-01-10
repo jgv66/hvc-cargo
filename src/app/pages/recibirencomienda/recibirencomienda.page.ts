@@ -15,6 +15,8 @@ export class RecibirencomiendaPage implements OnInit {
   retiros = [];
   cargando = false;
   reordenando = false;
+  textoBuscar;
+  buscando = false;
 
   constructor( public datos: DatosService,
                private funciones: FuncionesService,
@@ -28,6 +30,10 @@ export class RecibirencomiendaPage implements OnInit {
   }
   ionViewWillEnter() {
     this.cargarDatos();
+  }
+
+  onSearchCange( event ) {
+    this.textoBuscar = event.detail.value;
   }
 
   cargarDatos( event? ) {

@@ -400,7 +400,7 @@ module.exports = {
             });
     },
     //
-    saveIMG: function(sql, ib64, extension, id_pqt) {
+    saveDefinitionIMG: function(sql, ib64, extension, id_pqt) {
         // 
         var query = `
             insert into k_paquetes_img ( id_paquete, fechains, img_exten, img_name ) 
@@ -424,14 +424,16 @@ module.exports = {
         // --------------------------------------------------------------------------------------------------
         const query = `
             if exists ( select * from k_paquetes_img with (nolock) where id_paquete = ${ body.id_pqt } ) begin
-                select top 1 'ok' as resultado, img_name as imgb64 from k_paquetes_img with (nolock) where id_paquete = ${ body.id_pqt }
+                select 'ok' as resultado, img_name as imgb64
+                        ,convert(nvarchar(10), fechains, 103) as fecha
+                        ,convert(nvarchar(5), fechains, 108) as hora 
+                from k_paquetes_img with (nolock) 
+                where id_paquete = ${ body.id_pqt };
             end
             else begin
                 select 'nodata' as resultado
             end; 
         `;
-
-        console.log(query);
         //
         const request = new sql.Request();
         return request.query(query)
@@ -860,17 +862,22 @@ module.exports = {
                 return results.recordset;
             });
     },
-    //    
+    // consulta externa desde otra pagina web   
     dondeEstas: function(sql, body) {
         // --------------------------------------------------------------------------------------------------
         const query = `
-                SELECT pqt.id, pqt.id_paquete, pqt.fecha as fecha_entera, convert(nvarchar(10), pqt.fecha, 103) as fecha, convert(nvarchar(5), pqt.fecha, 108) as hora, pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
-                FROM k_paquetes_estado as pqt
+                SELECT pqt.id, pqt.id_paquete
+                       ,pqt.fecha as fecha_entera
+                       ,convert(nvarchar(10), pqt.fecha, 103) as fecha
+                       ,convert(nvarchar(5), pqt.fecha, 108) as hora
+                       ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
+                FROM k_paquetes_estado as pqt with (nolock)
+				inner join k_paquetes as elpqt with (nolock) on elpqt.id_paquete = pqt.id_paquete
                 left join k_usuarios as usuario on pqt.usuario = usuario.id
                 where pqt.id_paquete = ${ body.idpqt }
                 order by pqt.id desc;
                 `;
-        // console.log(query);
+        console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1170,6 +1177,164 @@ module.exports = {
             select cast(0 as bit) as resultado,'No existen encomiendas entre los parámetros ingresados' as mensaje;
             --
         end;
+        `;
+        console.log(query);
+        // --------------------------------------------------------------------------------------------------
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
+    entregaPendienteWeb: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+        --
+        with ids as ( select e.id_paquete,max(e.fecha) as fecha
+                    from k_paquetes_estado as e with (nolock)
+                    group BY e.id_paquete ),
+        estados as ( select e.*, us.nombre
+                    from k_paquetes_estado as e with (nolock)
+                    inner join ids as i on i.id_paquete = e.id_paquete and i.fecha = e.fecha
+                    left join k_usuarios as us with (nolock) on us.id = e.usuario )
+        select cast(1 as bit) as resultado, cast(0 as bit) as error,'' as mensaje, cast(0 as bit) as marcado, 
+                p.id_paquete,p.orden_de_pickeo,p.cliente,p.destinatario,coalesce(p.contacto,'(no informado)') as contacto,
+                p.obs_carga,p.obs_pickeo,p.peso,p.volumen,p.bultos,p.valor_cobrado,p.tipo_pago,tp.descripcion as desc_pago,
+                convert( nvarchar(10),p.fecha_creacion,103) as fecha_creacion, convert( nvarchar(8),p.fecha_creacion,108) as hora_creacion, 
+                convert( nvarchar(10),fecha_prometida,103) as fecha_prometida,
+                cli.rut as cli_rut,cli.razon_social as cli_razon,cli.nombre_fantasia as cli_fantasia,
+                cli.direccion as cli_direccion,cli.ciudad as cli_ciudad,cli.comuna as cli_comuna,
+                coalesce(cli.referencias,'(sin referencias)') as cli_referencias,cli.telefono1 as cli_fono1,cli.telefono2 as cli_fono2,
+                des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
+                des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
+                coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+        from k_paquetes as p
+        left join k_clientes as cli on cli.id_cliente=p.cliente
+        left join k_clientes as des on des.id_cliente=p.destinatario
+        left join k_tipopago as tp  on tp.tipo_pago=p.tipo_pago 
+        left join estados    as est on est.id_paquete = p.id_paquete
+        where exists ( select * 
+                    from k_paquetes_estado as es with (nolock) 
+                    where es.id_paquete = p.id_paquete 
+                    and es.estado = 400 )
+        and not exists ( select * 
+                        from k_paquetes_estado as es with (nolock) 
+                        where es.id_paquete = p.id_paquete 
+                            and es.estado between 420 and 600 ) 
+        order by p.orden_de_pickeo, p.fecha_creacion ;`;
+        // --------------------------------------------------------------------------------------------------
+        console.log(query);
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
+    entregaPendiente: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            with yalistas 
+            as (select p.id_paquete 
+                from k_paquetes as p with (nolock) 
+                where not exists (select *
+                                from k_paquetes_estado as es with (nolock) 
+                                where es.id_paquete = p.id_paquete
+                                    and es.estado in (450,950,960 ) )
+                and exists ( select *
+                            from k_paquetes_estado as es with (nolock) 
+                            where es.id_paquete = p.id_paquete
+                                and es.estado between 400 and 800 ) )
+            select cast(1 as bit) as resultado, cast(0 as bit) as error,'' as mensaje, cast(0 as bit) as marcado, 
+                    p.id_paquete,p.orden_de_pickeo,p.cliente,p.destinatario,
+                    p.obs_carga,p.peso,p.volumen,p.bultos,p.valor_cobrado,p.tipo_pago,tp.descripcion as desc_pago,
+                    convert( nvarchar(10),p.fecha_creacion,103) as fecha_creacion, convert( nvarchar(8),p.fecha_creacion,108) as hora_creacion, 
+                    convert( nvarchar(10),fecha_prometida,103) as fecha_prometida,
+                    cli.razon_social as cli_razon,cli.direccion as cli_direccion,des.razon_social as des_razon,
+                    des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
+                    des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                    p.recep_obs,p.recep_nombre,p.recep_rut,p.recep_obs,p.recep_parentezco
+            from k_paquetes as p
+            left join k_clientes as cli on cli.id_cliente=p.cliente
+            left join k_clientes as des on des.id_cliente=p.destinatario
+            left join k_tipopago as tp  on tp.tipo_pago=p.tipo_pago 
+            where exists ( select * 
+                            from yalistas as ya
+                            where ya.id_paquete = p.id_paquete  )
+            order by p.orden_de_pickeo, p.fecha_creacion ;
+        `;
+        console.log(query);
+        // --------------------------------------------------------------------------------------------------
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //    
+    paqueteEntregado: function(sql, body) {
+        //
+        const obs = (body.obs === undefined) ? '' : body.obs;
+        const nombre = (body.receptor === undefined) ? '' : body.receptor;
+        const rut = (body.rut === undefined) ? '' : body.rut;
+        const relacion = (body.relacion === undefined) ? '' : body.relacion;
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            --
+            declare @Error	nvarchar(250) , 
+                    @ErrMsg	nvarchar(2048); 
+            --
+            begin try 
+                if exists ( select * 
+                            from k_paquetes as p with (nolock)
+                            where p.id_paquete = ${ body.id_pqt } ) begin
+                    begin transaction
+                        --
+                        update k_paquetes set recep_obs       = '${ obs }', 
+                                              recep_nombre    = '${ nombre }', 
+                                              recep_rut       = '${ rut }', 
+                                              recep_parentezco= '${ relacion }'
+                        where id_paquete = ${ body.id_pqt };
+                        -- sin problemas
+                        if ( ${ body.problema === true ? 1 : 0 } = 0 ) begin
+                            --
+                            insert into k_paquetes_estado (id_paquete,usuario,fecha,comentario,estado)
+                            values ( ${ body.id_pqt }, ${ body.ficha }, getdate(), 'Cierre Exitoso', 950 );
+                            --
+                        end
+                        -- con dramas
+                        else begin
+                            --
+                            insert into k_paquetes_estado (id_paquete,usuario,fecha,estado,comentario)
+                            values ( ${ body.id_pqt }, ${ body.ficha }, getdate(), ${ body.queprobl }, ( select top 1 descripcion from k_estados where estado = ${ body.queprobl } ) );
+                            --
+                        end;
+                        --
+                    commit transaction
+                    --
+                    select cast(1 as bit) as resultado,cast(0 as bit) as error, 'Entregado exitosamente!' as mensaje;
+                    --
+                end
+                else begin
+                    --
+                    select cast(0 as bit) as resultado,cast(1 as bit) as error,'Encomienda no Existe' as mensaje;
+                    --
+                end; 
+            end try
+            begin catch
+                --
+                set @Error = @@ERROR
+                set @ErrMsg = ERROR_MESSAGE();
+                --
+                if (@@TRANCOUNT > 0 ) rollback transaction;
+                --
+                select cast(0 as bit) as resultado,cast(1 as bit) as error,ERROR_MESSAGE() as mensaje;
+            end catch; 
         `;
         console.log(query);
         // --------------------------------------------------------------------------------------------------

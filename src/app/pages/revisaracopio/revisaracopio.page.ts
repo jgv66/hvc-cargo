@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { DatosService } from '../../services/datos.service';
 import { PrintService } from '../../services/printer.service';
+import { DomSanitizer } from '@angular/platform-browser'; 
 
 const IMG_URL = 'http://23.239.29.171:3055/public/img/';
 
@@ -19,9 +20,9 @@ export class RevisaracopioPage implements OnInit {
   cargando = false;
 
   constructor( private modalCtrl: ModalController,
-               private alertCtrl: AlertController,
                private printer: PrintService,
-               private datos: DatosService ) { }
+               private datos: DatosService,
+               public domSanitizer: DomSanitizer ) { }
 
   ngOnInit() {
     this.titulo = 'Sin acopiar';
@@ -42,10 +43,8 @@ export class RevisaracopioPage implements OnInit {
     this.datos.servicioWEB( '/getimages', { id_pqt: this.item.id_paquete } )
         .subscribe( (dev: any) => {
           this.cargando = false;
-          // console.log(dev);
           if ( dev.resultado === 'ok' ) {
             this.foto = IMG_URL + dev.datos[0].imgb64;
-            console.log(this.foto);
           }
         });
   }

@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Encomienda #{{ item.id_paquete }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-list lines="none">
+        <ion-item *ngFor="let foto of fotos">
+            <ion-card style="margin-top: 20px;" mode="ios">
+                <img [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <ion-label>Fecha: {{ foto.fecha }} Hora: {{ foto.hora }}</ion-label>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

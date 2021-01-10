@@ -16,7 +16,7 @@
 
 <ion-content>
 
-    <ion-card class="welcome-card">
+    <ion-card>
         <img src="assets/images/revisaretiro2.jpg" alt="x1">
 
         <ion-card-header>
@@ -89,8 +89,8 @@
 
     <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
 
-    <ion-card class="fotocard">
-        <img [src]="foto">
+    <ion-card>
+        <img [src]="domSanitizer.bypassSecurityTrustUrl(foto)" alt="imágenes rescatadas">
     </ion-card>
 
 </ion-content>

@@ -5,6 +5,7 @@
         </ion-buttons>
         <ion-title>Por acopiar</ion-title>
     </ion-toolbar>
+    <ion-searchbar mode="ios" [debounce]="500" placeholder="Digite aquí lo que busca..." animated inputmode="text" (ionChange)="onSearchCange($event)"></ion-searchbar>
 </ion-header>
 <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
 
@@ -28,7 +29,7 @@
             <ion-label class="mg-cero">Pendientes de acopiar</ion-label>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of acopios; let i = index;" detail (click)="revisar( item, i )">
+        <ion-item *ngFor="let item of acopios | filtro: textoBuscar; let i = index;" detail (click)="revisar( item, i )">
             <!-- <ion-checkbox slot="start" [(ngModel)]="item.marcado"></ion-checkbox> -->
             <ion-label>
                 <h2 style="font-weight: bold; color: var(--ion-color-primary) ">(# {{ item.id_paquete }}) {{ item.cli_razon }}</h2>

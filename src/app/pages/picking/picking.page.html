@@ -5,9 +5,9 @@
                 <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>(#{{ item?.id_paquete }}) Retiro</ion-title>
+        <ion-title>Retiro #{{ item.id_paquete }}</ion-title>
         <ion-buttons slot="end">
-            <ion-button (click)="tomarFoto()">
+            <ion-button (click)="tomarFoto(item)">
                 <ion-icon slot="icon-only" size="large" name="camera-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -43,7 +43,7 @@
             <ion-checkbox color="mango" slot="start" name="it[0]" [(ngModel)]="it[0]"></ion-checkbox>
             <ion-label>{{ item.cli_razon }}</ion-label>
         </ion-item>
-        <ion-item style="height: 40px;">
+        <ion-item>
             <ion-checkbox color="mango" slot="start" name="it[1]" [(ngModel)]="it[1]"></ion-checkbox>
             <ion-label>{{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}</ion-label>
         </ion-item>
@@ -61,21 +61,18 @@
         </ion-item>
         <ion-item style="height: 40px;">
             <ion-label style="margin-left: 3px;" position="staked">Nro.de Documento:</ion-label>
-            <ion-input type="text" name="nroDocumento" [(ngModel)]="nroDocumento"></ion-input>
+            <ion-input class="ion-text-right" type="text" name="nroDocumento" [(ngModel)]="nroDocumento"></ion-input>
         </ion-item>
-        <ion-item style="height: 40px;">
+        <ion-item>
             <ion-label position="stacked">Observaciones al retirar</ion-label>
-            <ion-textarea rows="2" placeholder="Sus comentarios aquí..." name="item.obs_pickeo" [(ngModel)]="item.obs_pickeo"></ion-textarea>
+            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="item.obs_pickeo" [(ngModel)]="item.obs_pickeo"></ion-textarea>
         </ion-item>
-        <ion-card *ngIf=" foto " class="picker">
-            <img [src]="foto">
-            <ion-card-content style="margin-bottom: 0px;">
-                <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -300px;">
-                    <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
-                </ion-button>
-            </ion-card-content>
+        <ion-card *ngIf=" foto " style="margin-top: 20px;">
+            <ion-img [src]="foto" alt="imágenes rescatadas" class="picker"></ion-img>
+            <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -72px;">
+                <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
+            </ion-button>
         </ion-card>
-
         <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 25px;">
             Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
             la encomienda de pendiente a 'Acopios'.
@@ -92,8 +89,8 @@
                 </ion-button>
             </ion-col>
         </ion-row>
-
     </ion-list>
+
     <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
         <ion-list-header style="margin-top:5px; margin-bottom:10px">
             <ion-label>
@@ -120,13 +117,11 @@
             <ion-label position="stacked">Observaciones al problema</ion-label>
             <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="obsProblema" [(ngModel)]="obsProblema"></ion-textarea>
         </ion-item>
-        <ion-card *ngIf=" foto " class="fotocard">
-            <img [src]="foto">
-            <ion-card-content style="margin-bottom: 0px;">
-                <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -300px;">
-                    <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
-                </ion-button>
-            </ion-card-content>
+        <ion-card *ngIf=" foto " style="margin-top: 20px;">
+            <ion-img [src]="foto" alt="imágenes rescatadas" class="picker"></ion-img>
+            <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -72px;">
+                <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
+            </ion-button>
         </ion-card>
         <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
             <ion-col size="12">
