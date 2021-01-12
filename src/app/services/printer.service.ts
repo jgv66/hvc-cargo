@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { DatosService } from './datos.service';
 import { FuncionesService } from './funciones.service';
 import { commands } from './printer-commands';
@@ -15,6 +15,7 @@ export class PrintService {
 
   constructor( public btSerial: BluetoothSerial,
                private datos: DatosService,
+               private alertCtrl: AlertController,
                private loadCtrl: LoadingController,
                private funciones: FuncionesService ) {}
 
@@ -53,16 +54,43 @@ export class PrintService {
     this.selectedPrinter = macAddress;
   }
 
+  async ImprimeEncomienda( item ) {
+    const alert = await this.alertCtrl.create({
+      // header: 'Voucher de Encomienda',
+      message: 'Desea imprimir el voucher?',      
+      // message: 'Cuantas copias desea imprimir ?',      
+      // inputs: [
+      //   {
+      //     name: 'cuantasCopias',
+      //     type: 'number',
+      //     placeholder: 'copias'
+      //   }
+      // ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            // for (let i = 0; i < data.cuantasCopias; ++i ) {
+              this.ImprimirPicking( item );
+            // }
+          }
+        }
+      ]
+    });
+    await alert.present();      
+  }
+
   async ImprimirPicking( item ) {
-    //
     this.listPrinter();
     await this.selectPrinter(this.bluetoothList[0].id);
     //
     const device = this.selectedPrinter;
     const datax = this.construirRecibo( item );
-    //
-    // console.log('Device mac: ', device);
-    // console.log('Data: ', datax);
     //
     const load = await this.loadCtrl.create({
       message: 'Imprimiendo...',
@@ -74,7 +102,6 @@ export class PrintService {
             this.printData(this.noSpecialChars(datax))
               .then( async (printStatus) => {
                   await load.dismiss();
-                  // this.funciones.muestraySale('Impresión exitosa', 1, 'bottom');
                   this.disconnectBluetoothPrinter();
               })
               .catch(async (error) => {

@@ -129,38 +129,20 @@ export class OrdenpikPage implements OnInit {
                                              id_pqt:   item.id_paquete,
                                              obs:      data.obs,
                                              nroDoc:   data.nroDoc } )
-        .subscribe( (dev: any) => {
+        .subscribe( async (dev: any) => {
             this.grabando = false;
             if ( dev.resultado === 'ok' ) {
-              this.retiros.splice( pos, 1 );
-              this.funciones.muestraySale( 'Retiro se grabó.', 1, 'middle' );
+              this.funciones.muestraySale( 'Retiro se grabó.', 1, 'bottom' );
               // impresion
-              this.decideImprimir( item );
+              await this.printer.ImprimeEncomienda( item );
+              // sacarlo del array
+              this.retiros.splice( pos, 1 );
               //
             } else {
               this.funciones.msgAlert('', dev.datos);
             }
         });
     }
-  }
-
-  async decideImprimir( item ) {
-    const alert = await this.alertCtrl.create({
-      message: 'Desea imprimir el voucher de retiro?',
-      mode: 'ios',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {}
-        }, {
-          text: 'Sí, imprimir!',
-          handler: () => { this.printer.ImprimirPicking( item );; }
-        }
-      ]
-    });
-    await alert.present();
   }
 
 }

@@ -16,7 +16,7 @@ export class RevisaracopioPage implements OnInit {
   @Input() item;
 
   titulo = '';
-  foto = null;
+  fotos = [];
   cargando = false;
 
   constructor( private modalCtrl: ModalController,
@@ -27,11 +27,11 @@ export class RevisaracopioPage implements OnInit {
   ngOnInit() {
     this.titulo = 'Sin acopiar';
     this.printer.listPrinter();
-    this.cargarFoto();
+    // this.cargarFoto();
   }
 
   ImprimeEncomienda() {
-    this.printer.ImprimirPicking( this.item );
+    this.printer.ImprimeEncomienda( this.item );
   }
 
   salir() {
@@ -42,9 +42,16 @@ export class RevisaracopioPage implements OnInit {
     this.cargando = true;
     this.datos.servicioWEB( '/getimages', { id_pqt: this.item.id_paquete } )
         .subscribe( (dev: any) => {
+          console.log(dev);
           this.cargando = false;
-          if ( dev.resultado === 'ok' ) {
-            this.foto = IMG_URL + dev.datos[0].imgb64;
+          if (dev.resultado === 'ok') {
+            //
+            dev.datos.forEach( element => { 
+              element.imgb64 = IMG_URL + element.imgb64; 
+            });
+            //
+            this.fotos = dev.datos;
+            //
           }
         });
   }

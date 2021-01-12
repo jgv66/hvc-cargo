@@ -87,10 +87,20 @@
 
     </ion-card>
 
-    <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+    <!-- <ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
 
-    <ion-card>
+    <ion-list lines="none">
+        <ion-item *ngFor="let foto of fotos">
+            {{ foto }}
+            <ion-card style="margin-top: 20px;" mode="ios">
+                <img [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <ion-label>Fecha: {{ foto.fecha }} Hora: {{ foto.hora }}</ion-label>
+            </ion-card>
+        </ion-item>
+    </ion-list> -->
+
+    <!-- <ion-card>
         <img [src]="domSanitizer.bypassSecurityTrustUrl(foto)" alt="imágenes rescatadas">
-    </ion-card>
+    </ion-card> -->
 
 </ion-content>
