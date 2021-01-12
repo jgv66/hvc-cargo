@@ -37,7 +37,7 @@
         </ion-list-header>
         <ion-item *ngFor="let item of itemes" detail (click)="revisaFoto()">
             <ion-label>
-                <h2 style="font-weight: bold; color: red"><b>Fecha: {{ item.fecha }}</b> Hora: {{ item.hora }}</h2>
+                <h2 style="font-weight: bold; color: red"><b>{{ item.fecha }}</b> Hora: {{ item.hora }}</h2>
                 <b><p>{{ item.nombre }}: {{ item.comentario }}</p></b>
             </ion-label>
             <ion-reorder slot="end"></ion-reorder>

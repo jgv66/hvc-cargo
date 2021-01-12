@@ -4,12 +4,9 @@ import { FuncionesService } from 'src/app/services/funciones.service';
 import { DatosService } from '../../services/datos.service';
 import { Router } from '@angular/router';
 //
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TrespuntosComponent } from '../../components/trespuntos/trespuntos.component';
 import { VerfotoPage } from '../verfoto/verfoto.page';
-//
-const { Camera, Filesystem } = Plugins;
 //
 @Component({
   selector: 'app-delivery-fin',
@@ -106,14 +103,8 @@ export class DeliveryFinPage implements OnInit {
 
   async tomarFoto() {
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri, 
-      source: CameraSource.Camera, 
-      quality: 50 
-    });    
-    this.foto = capturedPhoto.webPath;
-    //
-    this.archivoImagen = await this.funciones.savePicture( capturedPhoto, this.item, '_delivery' );
+    await this.datos.addImage( this.item, '_delivery' );
+    this.foto = this.datos.xfoto;
   }
 
   eliminarFoto() {
@@ -127,15 +118,6 @@ export class DeliveryFinPage implements OnInit {
 
   entregar() {
     if ( this.todoOk() === true ) {
-      // se graba la imagen en formato base64 y en paralelo el picking
-      if ( this.foto !== null ) {
-        // const photo = this.funciones.b64toBlob( this.foto.replace('data:image/jpeg;base64,', ''), 'image/png' );
-        this.datos.uploadImage( this.archivoImagen.base64Data,
-                                this.archivoImagen.imageName,
-                                this.archivoImagen.formato,
-                                this.item.id_paquete )
-            .subscribe( ( newImage ) => {});
-      }
       // grabacion de entrega
       this.modalCtrl.dismiss({ ok:       true,
                                problema: false,
@@ -150,16 +132,6 @@ export class DeliveryFinPage implements OnInit {
   }
 
   problemas() {
-    // se graba la imagen en formato base64 y en paralelo el picking
-    if ( this.foto !== null ) {
-      this.datos.uploadImage( this.archivoImagen.base64Data,
-                              this.archivoImagen.imageName,
-                              this.archivoImagen.formato,
-                              this.item.id_paquete )
-          .subscribe(( newImage ) => {
-        console.log(newImage);
-      });
-    }
     // grabacion de entrega
     this.modalCtrl.dismiss({ ok:       true,
                              problema: true,

@@ -50,12 +50,8 @@ export class LoginPage implements OnInit {
     this.cargando = true;
     const pssw = window.btoa( this.miClave );
     // console.log(this.miClave, pssw);
-    // console.log( window.btoa(this.miEmail), window.btoa( this.miClave ), window.btoa( '123HVC' ) );
-    // this.datos.servicioWEB( '/validarUser', { rut: this.stringToHex( this.miRut ), clave: this.stringToHex( this.miClave ) } )
     this.datos.servicioWEB( '/usr', { email: this.miEmail.toLowerCase(), clave: pssw } )
-        .subscribe( dev => { console.warn(dev);
-                             this.revisaRespuesta( dev );
-                           });
+        .subscribe( dev => { this.revisaRespuesta( dev ); });
   }
   revisaRespuesta( dev ) {
     this.cargando = false;
@@ -66,7 +62,6 @@ export class LoginPage implements OnInit {
       this.funciones.msgAlert( 'ATENCION', dev.datos[0].mensaje );
     } else {
       //
-      console.log(dev.datos);
       if ( dev.datos[0].primeravez ) {
         // tslint:disable-next-line: quotemark
         this.funciones.msgAlert('', "Por su seguridad, la primera acción dentro de HVC-Cargo debe ser cambiar su clave de acceso. Será direccionado hacia 'Cambiar mi clave'.");

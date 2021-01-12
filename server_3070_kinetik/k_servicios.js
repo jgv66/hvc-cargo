@@ -864,19 +864,45 @@ module.exports = {
     },
     // consulta externa desde otra pagina web   
     dondeEstas: function(sql, body) {
-        // --------------------------------------------------------------------------------------------------
-        const query = `
+        // vienes desde afuera o es una consulta normal?
+        let query;
+        if (body.interno === undefined) {
+            query = `
+                SELECT top 1 pqt.id, elpqt.id_paquete
+                            ,elpqt.fecha_prometida as fecha_entera
+                            ,convert(nvarchar(10), elpqt.fecha_prometida, 103) as fecha
+                            ,convert(nvarchar(5), pqt.fecha, 108) as hora
+                            ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
+                FROM k_paquetes as elpqt with (nolock)
+                inner join k_paquetes_estado as pqt with (nolock) on elpqt.id_paquete = pqt.id_paquete and pqt.estado=100
+                left join k_usuarios as usuario on pqt.usuario = usuario.id
+                where elpqt.id_paquete = ${ body.idpqt }
+                order by pqt.id desc;
+                `;
+        } else {
+            query = `
+                SELECT top 1 pqt.id, elpqt.id_paquete
+                            ,elpqt.fecha_prometida as fecha_entera
+                            ,'Fecha Prometida: '+convert(nvarchar(10), elpqt.fecha_prometida, 103) as fecha
+                            ,convert(nvarchar(5), pqt.fecha, 108) as hora
+                            ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
+                FROM k_paquetes as elpqt with (nolock)
+                inner join k_paquetes_estado as pqt with (nolock) on elpqt.id_paquete = pqt.id_paquete and pqt.estado=100
+                left join k_usuarios as usuario on pqt.usuario = usuario.id
+                where elpqt.id_paquete = ${ body.idpqt }
+                union 
                 SELECT pqt.id, pqt.id_paquete
-                       ,pqt.fecha as fecha_entera
-                       ,convert(nvarchar(10), pqt.fecha, 103) as fecha
-                       ,convert(nvarchar(5), pqt.fecha, 108) as hora
-                       ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
+                    ,pqt.fecha as fecha_entera
+                    ,'Fecha Movim.: '+convert(nvarchar(10), pqt.fecha, 103) as fecha
+                    ,convert(nvarchar(5), pqt.fecha, 108) as hora
+                    ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
                 FROM k_paquetes_estado as pqt with (nolock)
-				inner join k_paquetes as elpqt with (nolock) on elpqt.id_paquete = pqt.id_paquete
+                inner join k_paquetes as elpqt with (nolock) on elpqt.id_paquete = pqt.id_paquete and pqt.estado<>100
                 left join k_usuarios as usuario on pqt.usuario = usuario.id
                 where pqt.id_paquete = ${ body.idpqt }
                 order by pqt.id desc;
                 `;
+        }
         console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();

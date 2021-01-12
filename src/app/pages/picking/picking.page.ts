@@ -4,10 +4,7 @@ import { FuncionesService } from 'src/app/services/funciones.service';
 import { DatosService } from '../../services/datos.service';
 import { Router } from '@angular/router';
 //
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer } from '@angular/platform-browser';
-//
-const { Camera, Filesystem } = Plugins;
 //
 @Component({
   selector: 'app-picking',
@@ -62,14 +59,8 @@ export class PickingPage implements OnInit {
 
   async tomarFoto( item ) {
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri, 
-      source: CameraSource.Camera, 
-      quality: 50 
-    });    
-    this.foto = capturedPhoto.webPath;
-    //
-    this.archivoImagen = await this.funciones.savePicture( capturedPhoto, item, '_pick' );
+    await this.datos.addImage( this.item, '_pick' );
+    this.foto = this.datos.xfoto;
   }
 
   eliminarFoto() {
@@ -83,17 +74,6 @@ export class PickingPage implements OnInit {
 
   retirar() {
     if ( this.todoOk() === true ) {
-      // se graba la imagen en formato base64 y en paralelo el picking
-      if ( this.foto !== null ) {
-        // const photo = this.funciones.b64toBlob( this.foto.replace('data:image/jpeg;base64,', ''), 'image/png' );
-        this.datos.uploadImage( this.archivoImagen.base64Data,
-                                this.archivoImagen.imageName,
-                                this.archivoImagen.formato,
-                                this.item.id_paquete )
-            .subscribe(( newImage ) => {
-            // console.log(newImage);
-          });
-      }
       // grabacion de picking
       this.modalCtrl.dismiss({ ok:       true,
                                problema: false,
@@ -106,16 +86,6 @@ export class PickingPage implements OnInit {
   }
 
   problemas() {
-    // se graba la imagen en formato base64 y en paralelo el picking
-    if ( this.foto !== null ) {
-      this.datos.uploadImage( this.archivoImagen.base64Data,
-                              this.archivoImagen.imageName,
-                              this.archivoImagen.formato,
-                              this.item.id_paquete )
-          .subscribe(( newImage ) => {
-        console.log(newImage);
-      });
-    }
     // grabacion de picking
     this.modalCtrl.dismiss({ ok:       true,
                              problema: true,

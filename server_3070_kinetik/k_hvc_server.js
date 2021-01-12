@@ -3,19 +3,16 @@ const express = require('express');
 const sql = require('mssql');
 const nodemailer = require('nodemailer'); // email sender function 
 const bodyParser = require('body-parser');
-const path = require('path');
-const multer = require('multer');
-const fs = require('fs'); //
 //
 var servicios = require('./k_servicios.js');
 var dbconex = require('./k_conexion_mssql.js');
 //
-const fileUpload = require('express-fileupload');
+const path = require('path');
+const multer = require('multer');
+var fs = require("fs");
 // 
 var app = express();
 // 
-app.use(fileUpload()); /* default options */
-//
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -33,13 +30,13 @@ CARPETA_IMG = publicpath + '/img/';
 
 // body parser
 app.use(bodyParser.json({ limit: '5mb', extended: true }));
-app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
 // dejare el server mssql siempre activo
 var conex = sql.connect(dbconex);
 
-// servidor escuchando puerto 3055
-var server = app.listen(3055, function() {
+// servidor escuchando puerto 3070
+var server = app.listen(3070, function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log("Escuchando en ", port);
@@ -214,44 +211,6 @@ app.post('/pickpreord',
             });
     });
 
-const uploadImage = async(req, res, next) => {
-
-    // console.log('req.body->', req.body);
-    try {
-        // to declare some path to store your converted image
-        const path = CARPETA_IMG + req.body.name;
-        const imgdata = req.body.foto64;
-        // to convert base64 format into random filename
-        const base64Data = imgdata.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-        //
-        console.log(path);
-        // console.log(base64Data);
-        //        
-        fs.writeFileSync(path, base64Data, { encoding: 'base64' });
-        // 
-        servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.id_pqt)
-            .then(() => {
-                return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen fue grabada.' });
-            })
-            .catch(function(error) {
-                res.status(500).json({ resultado: 'error', datos: error });
-
-            });
-        //     }
-        // }).catch(err => {
-        //     console.log('/imgUpload ERROR-> ', err);
-        // });
-        //
-    } catch (e) {
-        next(e);
-    }
-};
-app.post('/imgUp', uploadImage);
-
-//---------------------------------- pruebas multer
-var upload = multer({ dest: CARPETA_IMG });
-var type = upload.single('file');
-
 app.post('/pickeado',
     function(req, res) {
         //
@@ -264,7 +223,7 @@ app.post('/pickeado',
                     if (data[0].resultado === true) {
                         res.json({ resultado: "ok", datos: data });
                     } else {
-                        res.json({ resultado: "nodata", datos: 'Lo sentimos, paquete no se pudo cambiar de estado.' });
+                        res.json({ resultado: "nodata", datos: 'Lo sentimos, paquete no pudo cambiar de estado.' });
                     }
                 } catch (error) {
                     res.status(500).json({ resultado: 'error', datos: error });
@@ -281,7 +240,6 @@ app.post('/getimages',
         servicios.getImages(sql, req.body)
             .then(function(data) {
                 //
-                // console.log(data);
                 if (data.resultado === 'ok') {
                     //
                     if (data.resultado === 'ok') {
@@ -609,3 +567,37 @@ app.post('/entregado',
                 res.status(500).json({ resultado: 'error', datos: error });
             });
     });
+
+
+//---------------------------------- multer funcionó
+const upload = multer({ dest: CARPETA_IMG });
+app.post('/imgUp', upload.single('kfoto'), async(req, res, next) => {
+    console.log('req.file->', req.file);
+    console.log('req.body->', req.body);
+    try {
+        //
+        const newPath = req.file.destination + req.file.originalname;
+        const oldPath = req.file.path;
+        try {
+            // borrar antes de grabar
+            fs.unlinkSync(newPath);
+            //file removed
+        } catch (err) {
+            console.error(err);
+        }
+        fs.renameSync(oldPath, newPath);
+        // 
+        servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.id_pqt)
+            .then(() => {
+                return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+
+            });
+        //
+    } catch (e) {
+        next(e);
+    }
+});
+//---------------------------------- multer funcionó
