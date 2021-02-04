@@ -176,7 +176,7 @@ module.exports = {
                                     from k_paquetes_estado as es with (nolock) 
                                     where es.id_paquete = p.id_paquete 
                                         and es.estado = 200 )
-                order by p.orden_de_pickeo, p.fecha_creacion ;
+                order by p.id_paquete, p.fecha_creacion ;
             --
             end
             else begin
@@ -235,7 +235,7 @@ module.exports = {
                                     from k_paquetes_estado as es with (nolock) 
                                     where es.id_paquete = p.id_paquete 
                                         and es.estado = 300 )
-                order by p.orden_de_pickeo, p.fecha_creacion ;
+                order by p.id_paquete, p.fecha_creacion ;
                 --
             end
             else begin
@@ -435,6 +435,8 @@ module.exports = {
             end; 
         `;
         //
+        // console.log(query);
+        //
         const request = new sql.Request();
         return request.query(query)
             .then(resultado => {
@@ -623,6 +625,56 @@ module.exports = {
             });
     },
     //
+    entregarAlAcopio: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            set nocount on
+            --
+            if exists ( select * 
+                        from k_paquetes as p with (nolock)
+                        where p.id_paquete = ${ body.idpqt }
+                          and exists ( select * 
+                                       from k_paquetes_estado as es with (nolock) 
+                                       where es.id_paquete = p.id_paquete 
+                                         and es.estado = 300
+                                         and es.usuario = ${ body.ficha } )
+                          and not exists ( select * 
+                                           from k_paquetes_estado as es with (nolock) 
+                                           where es.id_paquete = p.id_paquete 
+                                           and es.estado between 400 and 600 ) ) begin
+                --
+                declare @Error nvarchar(250),
+                        @ErrMsg nvarchar(2048);
+                begin try
+                    --
+                    insert into k_paquetes_estado (id_paquete,fecha,usuario,estado,comentario)
+                                           values (${body.idpqt},getdate(),'${body.ficha}',400,'En bodega de acopio');
+                    --
+                    select cast(1 as bit) as resultado,'Encomienda entregada en acopio' as mensaje;
+                end try
+                begin catch
+                    --
+                    select cast(0 as bit) as resultado,'Encomienda no disponible para acopiar' as mensaje;
+                    --
+                end catch;
+                --
+            end
+            else begin
+                --
+                select cast(0 as bit) as resultado,'Encomienda no disponible para acopiar' as mensaje;
+                --
+            end; 
+        `;
+        console.log(query);
+        // --------------------------------------------------------------------------------------------------
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //    
     ciudades: function(sql, body) {
         // --------------------------------------------------------------------------------------------------
         const query = `
@@ -1102,9 +1154,13 @@ module.exports = {
     //
     dameEncomiendas: function(sql, body) {
         var query = `
+        --
+        declare @fi date = cast( '${body.fechaIni}' as date),
+                @ff date = cast( '${body.fechaFin}' as date );
+        --
         if exists ( select * 
                     from k_paquetes as p with (nolock) 
-                    where p.fecha_creacion between '${body.fechaIni}' and '${body.fechaFin}' ##cliente## ##destinatario## ) begin
+                    where ##casofiltro## ##cliente## ##destinatario## ) begin
             with ids
             as ( SELECT e.id_paquete,max(e.fecha) as fecha
                     FROM k_paquetes_estado as e with (nolock)
@@ -1131,7 +1187,7 @@ module.exports = {
             left join k_clientes as des on des.id_cliente=p.destinatario
             left join k_tipopago as tp  on tp.tipo_pago=p.tipo_pago 
             left join estados    as est on est.id_paquete = p.id_paquete
-            where p.fecha_creacion between '${body.fechaIni}' and '${body.fechaFin}' ##cliente## ##destinatario##
+            where ##casofiltro## ##cliente## ##destinatario##
             order by p.fecha_creacion, p.orden_de_pickeo  ;
         end
         else begin
@@ -1140,19 +1196,20 @@ module.exports = {
             --
         end;
         `;
-        if (body.idCliente === 0) {
-            query = query.replace('##cliente##', '');
-            query = query.replace('##cliente##', '');
+        if (body.filtro === 'fecha') {
+            query = query.split('##casofiltro##').join(` p.fecha_creacion between @fi and @ff `);
         } else {
-            query = query.replace('##cliente##', ` and p.cliente = ${body.idCliente} `);
-            query = query.replace('##cliente##', ` and p.cliente = ${body.idCliente} `);
+            query = query.split('##casofiltro##').join(` p.id_paquete between '${body.idIni}' and '${body.idFin}' `);
+        }
+        if (body.idCliente === 0) {
+            query = query.split('##cliente##').join('');
+        } else {
+            query = query.split('##cliente##').join(` and p.cliente = ${body.idCliente} `);
         }
         if (body.idDestina === 0) {
-            query = query.replace('##destinatario##', '');
-            query = query.replace('##destinatario##', '');
+            query = query.split('##destinatario##').join('');
         } else {
-            query = query.replace('##destinatario##', ` and p.destinatario = ${body.idDestina} `);
-            query = query.replace('##destinatario##', ` and p.destinatario = ${body.idDestina} `);
+            query = query.split('##destinatario##').join(` and p.destinatario = ${body.idDestina} `);
         }
         console.log(query);
         // --------------------------------------------------------------------------------------------------

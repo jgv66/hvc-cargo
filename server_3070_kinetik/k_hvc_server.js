@@ -8,6 +8,7 @@ var servicios = require('./k_servicios.js');
 var dbconex = require('./k_conexion_mssql.js');
 //
 const path = require('path');
+const fileExist = require('file-exists');
 const multer = require('multer');
 var fs = require("fs");
 // 
@@ -318,6 +319,28 @@ app.post('/poracopiar',
             });
     });
 
+app.post('/dejaracopiada',
+    function(req, res) {
+        //
+        console.log('/dejaracopiada', req.body);
+        servicios.entregarAlAcopio(sql, req.body)
+            .then(function(data) {
+                // console.log("/acopios ", data);
+                try {
+                    if (data.length === 0) {
+                        res.json({ resultado: "nodata", datos: '' });
+                    } else if (data[0].resultado === true) {
+                        res.json({ resultado: "ok", datos: data });
+                    }
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
 app.get('/tipopago',
     function(req, res) {
         //
@@ -580,7 +603,9 @@ app.post('/imgUp', upload.single('kfoto'), async(req, res, next) => {
         const oldPath = req.file.path;
         try {
             // borrar antes de grabar
-            fs.unlinkSync(newPath);
+            if (fileExist.sync(newPath)) {
+                fs.unlinkSync(newPath);
+            }
             //file removed
         } catch (err) {
             console.error(err);
