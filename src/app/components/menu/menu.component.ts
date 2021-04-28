@@ -39,6 +39,7 @@ export class MenuComponent implements OnInit {
       children: [
         { title: 'Seguimiento', url: '/seguimiento',  icon: 'earth-outline'  },
         { title: 'Fotos',       url: '/carrete',      icon: 'camera-outline' },
+        { title: 'Ruta',        url: '/ruta',         icon: 'map-outline'    },
       ]
     },
 

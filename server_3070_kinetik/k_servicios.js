@@ -1,3 +1,7 @@
+//
+var pdfs = require('html-pdf');
+var path = require('path');
+//
 module.exports = {
 
     // cada funncion se separa por comas  
@@ -47,7 +51,9 @@ module.exports = {
                 des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                 des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                 coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                p.documento_legal,p.numero_legal 
         from k_paquetes as p
         left join k_clientes as cli on cli.id_cliente=p.cliente
         left join k_clientes as des on des.id_cliente=p.destinatario
@@ -115,7 +121,9 @@ module.exports = {
                     des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                     des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                     coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                    coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                    p.documento_legal,p.numero_legal  
             from k_paquetes as p
             left join k_clientes as cli on cli.id_cliente=p.cliente
             left join k_clientes as des on des.id_cliente=p.destinatario
@@ -166,7 +174,8 @@ module.exports = {
                         coalesce(cli.referencias,'(sin referencias)') as cli_referencias,cli.telefono1 as cli_fono1,cli.telefono2 as cli_fono2,
                         des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                         des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
-                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2 
+                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                        p.documento_legal,p.numero_legal  
                 from k_paquetes as p
                 left join k_clientes as cli on cli.id_cliente=p.cliente
                 left join k_clientes as des on des.id_cliente=p.destinatario
@@ -220,7 +229,8 @@ module.exports = {
                         coalesce(cli.referencias,'(sin referencias)') as cli_referencias,cli.telefono1 as cli_fono1,cli.telefono2 as cli_fono2,
                         des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                         des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
-                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2 
+                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                        p.documento_legal,p.numero_legal 
                 from k_paquetes as p
                 left join k_clientes as cli on cli.id_cliente=p.cliente
                 left join k_clientes as des on des.id_cliente=p.destinatario
@@ -244,7 +254,7 @@ module.exports = {
                 --
             end; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -278,7 +288,7 @@ module.exports = {
                 --
             end; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -390,7 +400,7 @@ module.exports = {
                 select cast(0 as bit) as resultado,cast(1 as bit) as error,ERROR_MESSAGE() as mensaje;
             end catch; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -405,7 +415,7 @@ module.exports = {
         var query = `
             insert into k_paquetes_img ( id_paquete, fechains, img_exten, img_name ) 
             values ( ${ id_pqt }, getdate(), '${ extension }', '${ ib64 }' ) ;`;
-        console.log('saveIMG', query);
+        // console.log('saveIMG', query);
         const request = new sql.Request();
         return request.query(query)
             .then(resultado => {
@@ -477,7 +487,9 @@ module.exports = {
                 des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                 des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                 coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                p.documento_legal,p.numero_legal 
         from k_paquetes as p
         left join k_clientes as cli on cli.id_cliente=p.cliente
         left join k_clientes as des on des.id_cliente=p.destinatario
@@ -493,7 +505,7 @@ module.exports = {
                             and es.estado between 420 and 600 ) 
         order by p.orden_de_pickeo, p.fecha_creacion ;`;
         // --------------------------------------------------------------------------------------------------
-        console.log(query);
+        // console.log(query);
         var request = new sql.Request();
         //
         return request.query(query)
@@ -527,7 +539,8 @@ module.exports = {
                         coalesce(cli.referencias,'(sin referencias)') as cli_referencias,cli.telefono1 as cli_fono1,cli.telefono2 as cli_fono2,
                         des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                         des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
-                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2 
+                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                        p.documento_legal,p.numero_legal 
                 from k_paquetes as p
                 left join k_clientes as cli on cli.id_cliente=p.cliente
                 left join k_clientes as des on des.id_cliente=p.destinatario
@@ -550,7 +563,7 @@ module.exports = {
                 --
             end; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -592,7 +605,9 @@ module.exports = {
                         des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                         des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                         coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                        convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                        convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                        coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                        p.documento_legal,p.numero_legal 
                 from k_paquetes as p
                 left join k_clientes as cli on cli.id_cliente=p.cliente
                 left join k_clientes as des on des.id_cliente=p.destinatario
@@ -665,7 +680,7 @@ module.exports = {
                 --
             end; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -730,7 +745,7 @@ module.exports = {
                     select cast(0 as bit) as resultado;
                 end catch;
                 `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -741,7 +756,7 @@ module.exports = {
     },
     //
     clientes: function(sql, body) {
-        console.log(body);
+        // console.log(body);
         // --------------------------------------------------------------------------------------------------
         var query = '';
         if (body.buscar !== '') {
@@ -750,7 +765,7 @@ module.exports = {
         } else {
             query = 'SELECT top 50 * FROM k_clientes order by razon_social ;';
         }
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -803,7 +818,7 @@ module.exports = {
                     --
                 end catch;
                 `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -862,7 +877,7 @@ module.exports = {
                     --
                 end catch;
                 `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -905,7 +920,7 @@ module.exports = {
                     --
                 end catch;
                 `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -920,16 +935,36 @@ module.exports = {
         let query;
         if (body.interno === undefined) {
             query = `
-                SELECT top 1 pqt.id, elpqt.id_paquete
-                            ,elpqt.fecha_prometida as fecha_entera
-                            ,convert(nvarchar(10), elpqt.fecha_prometida, 103) as fecha
-                            ,convert(nvarchar(5), pqt.fecha, 108) as hora
-                            ,pqt.estado, pqt.comentario, pqt.usuario, usuario.nombre
+                with 
+                ingreso as ( select id_paquete,fecha,usuario from k_paquetes_estado with (nolock) where id_paquete=${ body.idpqt } and estado=100 ),
+                retiro  as ( select id_paquete,fecha,usuario from k_paquetes_estado with (nolock) where id_paquete=${ body.idpqt } and estado=300 ),
+                acopio  as ( select id_paquete,fecha,usuario from k_paquetes_estado with (nolock) where id_paquete=${ body.idpqt } and estado=400 ),
+                entrega as ( select top 1 id_paquete,fecha,usuario from k_paquetes_estado with (nolock) where id_paquete=${ body.idpqt } and estado in (900,950) )
+                SELECT top 1 elpqt.id_paquete
+                        ,'Ingreso al Sistema' as aingreso
+                        ,coalesce(convert(nvarchar(10), ing.fecha, 103 ),'') as fingreso
+                        ,convert(nvarchar(5), ing.fecha, 108) as hingreso
+                        ,(select nombre from k_usuarios as ux with (nolock) where ing.usuario = ux.id) as uingreso
+                        ,'Encomienda retirada' as aretiro
+                        ,coalesce(convert(nvarchar(10), ret.fecha, 103 ),'') as fretiro
+                        ,convert(nvarchar(5), ret.fecha, 108) as hretiro
+                        ,(select nombre from k_usuarios as ux with (nolock) where ret.usuario = ux.id) as uretiro
+                        ,'En bodega de acopio' as aacopio
+                        ,coalesce(convert(nvarchar(10), aco.fecha, 103 ),'') as facopio
+                        ,convert(nvarchar(5), aco.fecha, 108) as hacopio
+                        ,(select nombre from k_usuarios as ux with (nolock) where aco.usuario = ux.id) as uacopio
+                        ,'Entregado en destino' as aentrega
+                        ,coalesce(convert(nvarchar(10), ent.fecha, 103 ),'') as fentrega
+                        ,convert(nvarchar(5), ent.fecha, 108) as hentrega
+                        ,(select nombre from k_usuarios as ux with (nolock) where ent.usuario = ux.id) as uentrega
+                        ,convert(nvarchar(10), elpqt.fecha_prometida, 103) as fprometida
+                        --,'Prometida de entrega: '+convert(nvarchar(10), elpqt.fecha_prometida, 103) as fecha
                 FROM k_paquetes as elpqt with (nolock)
-                inner join k_paquetes_estado as pqt with (nolock) on elpqt.id_paquete = pqt.id_paquete and pqt.estado=100
-                left join k_usuarios as usuario on pqt.usuario = usuario.id
-                where elpqt.id_paquete = ${ body.idpqt }
-                order by pqt.id desc;
+                left join ingreso as ing with (nolock) on elpqt.id_paquete = ing.id_paquete 
+                left join retiro  as ret with (nolock) on elpqt.id_paquete = ret.id_paquete
+                left join acopio  as aco with (nolock) on elpqt.id_paquete = aco.id_paquete
+                left join entrega as ent with (nolock) on elpqt.id_paquete = ent.id_paquete
+                where elpqt.id_paquete = ${ body.idpqt };
                 `;
         } else {
             query = `
@@ -955,7 +990,7 @@ module.exports = {
                 order by pqt.id desc;
                 `;
         }
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1142,7 +1177,7 @@ module.exports = {
             query = query.replace('##destinatario##', ` and p.destinatario = ${body.idDestina} `);
             query = query.replace('##destinatario##', ` and p.destinatario = ${body.idDestina} `);
         }
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1181,7 +1216,9 @@ module.exports = {
                     des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                     des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                     coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                    coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                    p.documento_legal,p.numero_legal 
             from k_paquetes as p
             left join k_clientes as cli on cli.id_cliente=p.cliente
             left join k_clientes as des on des.id_cliente=p.destinatario
@@ -1211,7 +1248,7 @@ module.exports = {
         } else {
             query = query.split('##destinatario##').join(` and p.destinatario = ${body.idDestina} `);
         }
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1246,7 +1283,9 @@ module.exports = {
                     des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                     des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                     coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                    convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                    coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                    p.documento_legal,p.numero_legal 
             from k_paquetes as p
             left join k_clientes as cli on cli.id_cliente=p.cliente
             left join k_clientes as des on des.id_cliente=p.destinatario
@@ -1261,7 +1300,7 @@ module.exports = {
             --
         end;
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1293,7 +1332,9 @@ module.exports = {
                 des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
                 des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                 coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion, coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador 
+                convert( nvarchar(10),est.fecha,103) as asignacion,convert( nvarchar(5),est.fecha,108) as hora_asignacion,
+                coalesce(est.comentario,'PENDIENTE') as estado, coalesce(est.nombre,'n/a') as pickeador,
+                p.documento_legal,p.numero_legal 
         from k_paquetes as p
         left join k_clientes as cli on cli.id_cliente=p.cliente
         left join k_clientes as des on des.id_cliente=p.destinatario
@@ -1309,7 +1350,7 @@ module.exports = {
                             and es.estado between 420 and 600 ) 
         order by p.orden_de_pickeo, p.fecha_creacion ;`;
         // --------------------------------------------------------------------------------------------------
-        console.log(query);
+        // console.log(query);
         var request = new sql.Request();
         //
         return request.query(query)
@@ -1340,7 +1381,8 @@ module.exports = {
                     cli.razon_social as cli_razon,cli.direccion as cli_direccion,des.razon_social as des_razon,
                     des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
                     des.telefono1 as des_fono1,des.telefono2 as des_fono2,
-                    p.recep_obs,p.recep_nombre,p.recep_rut,p.recep_obs,p.recep_parentezco
+                    p.recep_obs,p.recep_nombre,p.recep_rut,p.recep_obs,p.recep_parentezco,
+                    p.documento_legal,p.numero_legal 
             from k_paquetes as p
             left join k_clientes as cli on cli.id_cliente=p.cliente
             left join k_clientes as des on des.id_cliente=p.destinatario
@@ -1350,7 +1392,7 @@ module.exports = {
                             where ya.id_paquete = p.id_paquete  )
             order by p.orden_de_pickeo, p.fecha_creacion ;
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1419,7 +1461,7 @@ module.exports = {
                 select cast(0 as bit) as resultado,cast(1 as bit) as error,ERROR_MESSAGE() as mensaje;
             end catch; 
         `;
-        console.log(query);
+        // console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //
@@ -1429,5 +1471,165 @@ module.exports = {
             });
     },
     //
+    PDFDoc: function(encomienda) {
+        //
+        return new Promise((resolve, reject) => {
+
+            xhoy = new Date();
+            hora = xhoy.getHours().toString();
+            minu = xhoy.getMinutes().toString();
+            // shortname = 'GDV.pdf';
+            shortname = `ENC_${ enca.folio.toString() }_${ enca.nroint.toString() }_${ hora }_${ minu }.pdf`;
+            filename = path.join(CARPETA_PDF, shortname);
+            //
+            console.log('filename -> ', filename);
+            //
+            var contenido = `                       
+                            <html>
+                                <head>
+                                    <meta charset="utf-8">
+                                    <style>
+                                        html, body { font-size: 14px; }
+                                        table { width: 100%; font-size: 7px;  }
+                                        thead { color: white; background: #565252; }
+                                        tbody { color: black; }
+                                        td,th { border: 1px; padding: 5px; }
+                                        tfoot { color: red; }
+                                    </style>
+                                </head>
+                                <body>
+                                    <h3 style="text-align: center;">${ enca.descconcepto }</h3>
+                                    <h3 style="text-align: center;">Folio : ${ enca.folio } - Nro.Interno : ${ enca.nroint }</h3>
+                                    <hr><br>
+                                    <!-- encabezado -->
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td width="15%" align="left">Local</td>
+                                                <td width="40%" align="left" style="font-weight: bold;">${ enca.nomlocal }</td width="15%" align="left">
+                                                <td width="15%" align="right">Fecha : </td>
+                                                <td width="15%" align="left" style="font-weight: bold;">${ enca.fecha }</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%" align="left">Centro de Costo</td>
+                                                <td width="60%" align="left" style="font-weight: bold;">${ enca.ccosto }</td>
+                                                <td width="15%" align="right">Usuario : </td>
+                                                <td width="15%" align="left" style="font-weight: bold;">${ enca.usuario }</td>
+                                                <td>&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="15%" align="left">Glosa</td>
+                                                <td width="60%" align="left" style="font-weight: bold;">${ enca.glosa }</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>
+                                    <!--  -->
+                                    <br>
+                                    <!-- detalle -->
+                                    <table>
+                                        <thead style="color:white;background: #565252;">
+                                            <tr>
+                                                <th width="12%" align="left">Código</th>
+                                                <th width="49%" align="left">Producto</th>
+                                                <th width="9%" align="right">Cantidad</th>
+                                                <th width="5%" align="left">Unidad</th>
+                                                <th width="10%" align="right">Precio</th>
+                                                <th width="15%" align="right">SubTotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        `;
+            var linea = 0;
+            deta.forEach(element => {
+                ++linea;
+                contenido += `
+                                            <tr>
+                                                <td width="12%" align="left" >${ element.codigo      }</td>
+                                                <td width="49%" align="left" >${ element.descripcion }</td>
+                                                <td width="9%" align="right" >${ element.cantidad    }</td>
+                                                <td width="5%" align="left"  >${ element.unidad      }</td>
+                                                <td width="10%" align="right">n/a</td>
+                                                <td width="15%" align="right">n/a</td>
+                                            </tr>
+                            `;
+            });
+            contenido += `
+                                        </tbody>
+                                                         
+                                    </table>
+                                </body>
+                            </html>
+                            `;
+            // 
+            // console.log(contenido);
+            //
+            var options = {
+                "height": "10cm", // allowed units: mm, cm, in, px
+                "width": "7cm", // allowed units: mm, cm, in, px
+                "type": "pdf", // allowed file types: png, jpeg, pdf
+                "header": { "height": "2mm" },
+                "footer": { "height": "2mm" }
+            };
+            pdfs.create(contenido, options)
+                .toFile(filename,
+                    function(err, res) {
+                        if (err) {
+                            reject('error');
+                            console.log(err);
+                        } else {
+                            console.log(res);
+                            resolve(shortname);
+                        }
+                    });
+        });
+    },
+    //
+    unaEncomienda: function(sql, body) {
+        console.log(body);
+        // --------------------------------------------------------------------------------------------------
+        var query = `
+            if exists ( select * 
+                        from k_paquetes as p with (nolock)
+                        where id_paquete = ${ body.idpqt } ) begin
+                --
+                select cast(1 as bit) as resultado, cast(0 as bit) as error,'' as mensaje,
+                        p.id_paquete,p.orden_de_pickeo,p.cliente,p.destinatario,coalesce(p.contacto,'(no informado)') as contacto,
+                        p.obs_carga,p.peso,p.volumen,p.bultos,p.valor_cobrado,p.tipo_pago,tp.descripcion as desc_pago,
+                        convert( nvarchar(10),p.fecha_creacion,103) as fecha_creacion, convert( nvarchar(8),p.fecha_creacion,108) as hora_creacion, 
+                        convert( nvarchar(10),fecha_prometida,103) as fecha_prometida,
+                        cli.rut as cli_rut,cli.razon_social as cli_razon,cli.nombre_fantasia as cli_fantasia,
+                        cli.direccion as cli_direccion,cli.ciudad as cli_ciudad,cli.comuna as cli_comuna,
+                        coalesce(cli.referencias,'(sin referencias)') as cli_referencias,cli.telefono1 as cli_fono1,cli.telefono2 as cli_fono2,
+                        des.rut as des_rut,des.razon_social as des_razon,des.nombre_fantasia as des_fantasia,
+                        des.direccion as des_direccion,des.ciudad as des_ciudad,des.comuna as des_comuna,
+                        coalesce(des.referencias,'(sin referencias)') as des_referencias,des.telefono1 as des_fono1,des.telefono2 as des_fono2,
+                        p.documento_legal,p.numero_legal  
+                from k_paquetes as p
+                left join k_clientes as cli on cli.id_cliente=p.cliente
+                left join k_clientes as des on des.id_cliente=p.destinatario
+                left join k_tipopago as tp  on tp.tipo_pago=p.tipo_pago
+                where p.id_paquete = ${ body.idpqt } ;
+            --
+            end
+            else begin
+                --
+                select cast(0 as bit) as resultado,'No existe encomienda señalada' as mensaje;
+                --
+            end; `;
+        // console.log(query);
+        // --------------------------------------------------------------------------------------------------
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
+
 
 };

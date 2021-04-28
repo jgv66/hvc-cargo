@@ -4,6 +4,7 @@ import { FuncionesService } from '../../services/funciones.service';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { VerfotoPage } from '../verfoto/verfoto.page';
+import { PrintService } from '../../services/printer.service';
 
 @Component({
   selector: 'app-seguimiento',
@@ -18,6 +19,7 @@ export class SeguimientoPage implements OnInit {
   id;
 
   constructor( private datos: DatosService,
+               private printer: PrintService,
                private funciones: FuncionesService,
                private router: Router,
                private modalCtrl: ModalController ) {}
@@ -48,7 +50,7 @@ export class SeguimientoPage implements OnInit {
     this.datos.servicioWEB( '/estado_pqt', { idpqt: this.id_pqt, interno: 1 } )
         .subscribe( (dev: any) => {
           this.cargando = false;
-          // console.log(dev);
+          console.log(dev);
           if ( dev.resultado === 'ok' ) {
             //
             this.itemes = dev.datos;
@@ -69,5 +71,19 @@ export class SeguimientoPage implements OnInit {
     //
   }
 
+  ImprimeEncomienda( item ) {
+    // console.log( item.id_paquete )
+    this.datos.servicioWEB( '/unpaquete', { idpqt: item.id_paquete } )
+        .subscribe( (dev: any) => {
+          if ( dev.resultado === 'ok' ) {
+            //
+            console.log(dev.datos[0]);
+            this.printer.ImprimirPicking( dev.datos[0] );
+            //
+          } else {
+            this.funciones.msgAlert('', 'No existen datos ligados a esta encomienda.');
+          }
+        });    
+  }
 
 }

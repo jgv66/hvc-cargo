@@ -591,6 +591,21 @@ app.post('/entregado',
             });
     });
 
+app.post('/unpaquete',
+    function(req, res) {
+        //
+        servicios.unaEncomienda(sql, req.body)
+            .then(function(data) {
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
 
 //---------------------------------- multer funcionó
 const upload = multer({ dest: CARPETA_IMG });
@@ -626,3 +641,18 @@ app.post('/imgUp', upload.single('kfoto'), async(req, res, next) => {
     }
 });
 //---------------------------------- multer funcionó
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+app.post('/imprimirOrden',
+    (req, res) => {
+        //
+        console.log('imprimirOrden->', req.body);
+        servicios.PDFDoc(resultado, CARPETA_PDF)
+            .then(file => {
+                res.json({ resultado: 'ok', datos: file });
+            })
+            .catch(err => {
+                res.json({ resultado: 'error', datos: err });
+            });
+
+    });
