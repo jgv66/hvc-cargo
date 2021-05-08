@@ -93,7 +93,7 @@
     <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
 
         <ion-card class="maximo90">
-            <ion-card-header>
+            <ion-card-header style="padding-bottom: 0px;">
                 <ion-card-title>
                     <ion-label>
                         <h1 class="rojo ion-text-center">Recalcular el valor cobrado</h1>
@@ -196,7 +196,7 @@
                                 </ion-item>
                             </ion-col>
                         </ion-row>
-                        <small class="ion-text-center">( Puede poner una fracción de pallets, Ej: 1.5 ó 0.75 )</small>
+                        <p class="ion-text-center" style="margin-top:5px;">( Se permiten fracciones. Ej: 1.5 ó 0.75 )</p>
                         <ion-row style="font-size:80%;margin-top:25px;margin-bottom:15px;padding-left:20px;padding-right:20px">
                             <ion-col size="12">
                                 <ion-button expand="block" size="small" share="round" color="mango" (click)="solicitarCalculo()">
