@@ -72,10 +72,6 @@
                 <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
             </ion-button>
         </ion-card>
-        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 25px;">
-            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
-            la encomienda de pendiente a 'Acopios'.
-        </p>
         <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
             <ion-col size="4">
                 <ion-button expand="block" size="small" share="round" color="" (click)="salir()">
@@ -88,6 +84,10 @@
                 </ion-button>
             </ion-col>
         </ion-row>
+        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 15px;">
+            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
+            la encomienda de pendiente a 'Acopios'.
+        </p>
     </ion-list>
 
     <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
@@ -111,7 +111,7 @@
                 </ion-segment>
                 <ion-list *ngIf=" queTipo === 'bulto' " class="animated fadeIn" lines="none" style="margin-top:5px;">
                     <ion-row class="altofila">
-                        <ion-col size="5">
+                        <ion-col size="6">
                             <ion-item>
                                 <ion-label>Alto (cms)</ion-label>
                             </ion-item>
@@ -123,7 +123,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="altofila">
-                        <ion-col size="5">
+                        <ion-col size="6">
                             <ion-item>
                                 <ion-label>Ancho (cms)</ion-label>
                             </ion-item>
@@ -135,7 +135,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="altofila">
-                        <ion-col size="5">
+                        <ion-col size="6">
                             <ion-item>
                                 <ion-label>Largo (cms)</ion-label>
                             </ion-item>
@@ -147,7 +147,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="altofila">
-                        <ion-col size="5">
+                        <ion-col size="6">
                             <ion-item>
                                 <ion-label>Peso (Kg)</ion-label>
                             </ion-item>
@@ -162,7 +162,7 @@
                         <ion-col size="12">
                             <ion-button expand="block" size="small" share="round" color="mango" (click)="solicitarCalculo()">
                                 <ion-icon slot="start" name="cube-outline"></ion-icon>
-                                VOLVER A CALCULAR
+                                Recalcular con estos datos
                             </ion-button>
                         </ion-col>
                     </ion-row>

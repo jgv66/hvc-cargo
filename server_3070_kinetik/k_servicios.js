@@ -352,37 +352,37 @@ module.exports = {
                         update k_paquetes set obs_pickeo = '${ obs }', numero_legal='${ nroDoc }', picking_ok = '${ picking_ok }', documento_legal=''
                         where id_paquete = ${ body.id_pqt };
                         --
-                        set  @Error = @@ERROR
+                        set  @Error = @@ERROR;
                         if ( @Error <> 0 ) begin
                             set @ErrMsg = ERROR_MESSAGE();
                             THROW @Error, @ErrMsg, 0 ;  
-                        end	
+                        end;	
                         -- sin problemas
                         if ( ${ body.problema === true ? 1 : 0 } = 0 ) begin
                             insert into k_paquetes_estado (id_paquete,usuario,fecha,comentario,estado)
                             values ( ${ body.id_pqt }, ${ body.ficha }, getdate(), 'Encomienda retirada', 300 );
                             --
-                            set  @Error = @@ERROR
+                            set  @Error = @@ERROR;
                             if ( @Error <> 0 ) begin
                                 set @ErrMsg = ERROR_MESSAGE();
                                 THROW @Error, @ErrMsg, 0 ;  
-                            end	
+                            end	;
                             --
                         end
                         -- con dramas
                         else begin
                             insert into k_paquetes_estado (id_paquete,usuario,fecha,estado,comentario)
-                            values ( ${ body.id_pqt }, ${ body.ficha }, getdate(), ${ body.queprobl }, ( select top 1 descripcion from k_estados where estado = ${ body.queprobl } ) );
+                            values ( ${ body.id_pqt }, ${ body.ficha }, getdate(), 0, '' );
                             --
-                            set  @Error = @@ERROR
+                            set  @Error = @@ERROR;
                             if ( @Error <> 0 ) begin
                                 set @ErrMsg = ERROR_MESSAGE();
                                 THROW @Error, @ErrMsg, 0 ;  
-                            end	
+                            end;	
                             --
                         end;
                         --
-                    commit transaction
+                    commit transaction;
                     --
                     select cast(1 as bit) as resultado,cast(0 as bit) as error, 'Recogido exitosamente!' as mensaje;
                     --
@@ -400,7 +400,7 @@ module.exports = {
                 select cast(0 as bit) as resultado,cast(1 as bit) as error,ERROR_MESSAGE() as mensaje;
             end catch; 
         `;
-        // console.log(query);
+        console.log(query);
         // --------------------------------------------------------------------------------------------------
         var request = new sql.Request();
         //

@@ -215,11 +215,12 @@ app.post('/pickpreord',
 app.post('/pickeado',
     function(req, res) {
         //
+        console.log("llamado el pickeado ->", req.body);
         const imgb64 = (req.body.foto === undefined) ? undefined : JSON.parse(req.body.foto);
         //
         servicios.paqueteRecogido(sql, req.body)
             .then(function(data) {
-                // console.log("/pickeado ", data);
+                console.log("ya pickeado ->", data);
                 try {
                     if (data[0].resultado === true) {
                         res.json({ resultado: "ok", datos: data });
