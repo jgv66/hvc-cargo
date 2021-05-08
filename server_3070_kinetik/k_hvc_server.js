@@ -607,6 +607,42 @@ app.post('/unpaquete',
             });
     });
 
+app.post('/recalculo',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.volverACalcular(req.body)
+            .then((data) => {
+                // console.log('resultado', data);
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
+app.post('/cambiaprecio',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.cambiarPrecio(sql, req.body)
+            .then((data) => {
+                console.log('resultado', data);
+                try {
+                    res.json({ resultado: "ok", datos: data });
+                } catch (error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+                }
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
+            });
+    });
+
 //---------------------------------- multer funcionó
 const upload = multer({ dest: CARPETA_IMG });
 app.post('/imgUp', upload.single('kfoto'), async(req, res, next) => {

@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="modalCtrl.dismiss()">
+                <ion-icon slot="start" name="arrow-back" color="dark"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title clas="normal iontext-wrap">
+            Pin rojo es tú ubicación
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div #map class="map"></div>
+
+    <ion-chip class="miubicacion" (click)="mylocation()">
+        <ion-label class="normal">Mi ubicación actual</ion-label>
+        <ion-icon name="locate-outline"></ion-icon>
+    </ion-chip>
+
+    <ion-chip class="aceptar" (click)="aceptar()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        <ion-label class="normal">Aceptar</ion-label>
+    </ion-chip>
+
+</ion-content>

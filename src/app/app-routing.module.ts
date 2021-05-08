@@ -14,6 +14,7 @@ const routes: Routes =
   { path: 'delivery-fin',loadChildren: () => import('./pages/delivery-fin/delivery-fin.module')          .then( m => m.DeliveryFinPageModule  ) },
   { path: 'seguimiento', loadChildren: () => import('./pages/seguimiento/seguimiento.module')            .then( m => m.SeguimientoPageModule  ) },
   { path: 'verfoto',     loadChildren: () => import('./pages/verfoto/verfoto.module')                    .then( m => m.VerfotoPageModule      ) },
+  { path: 'rutas',       loadChildren: () => import('./pages/rutas/rutas.module')                        .then( m => m.RutasPageModule        ) },
   { path: 'carrete',     loadChildren: () => import('./pages/verfotos/verfotos.module')                  .then( m => m.VerfotosPageModule     ) },
   { path: 'cambioclave', loadChildren: () => import('./pages/signup/signup.module')                      .then( m => m.SignupPageModule       ) },
   { path: 'meolvide',    loadChildren: () => import('./pages/meolvide/meolvide.module')                  .then( m => m.MeolvidePageModule     ) },

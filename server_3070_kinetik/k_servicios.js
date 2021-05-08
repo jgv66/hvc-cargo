@@ -1630,6 +1630,87 @@ module.exports = {
             });
     },
     //
+    volverACalcular: function(body) {
+        // 
+        return new Promise((resolve) => {
+            // 
+            const unMillon = 1000000;
+            const minimo = 4000;
+            const valorPallet = 60000;
+            const valorIVA = 1.0;
+            // 
+            if (body.bulto === 'bulto') {
+                console.log('bulto');
+                // 
+                const mt3 = (body.alto * body.ancho * body.largo) / unMillon;
+                let valorXbulto = mt3 * 165 * 380;
+                valorXbulto = Math.round(((valorXbulto < minimo) ? minimo : valorXbulto) * valorIVA);
+                // 
+                if (body.peso <= 100) {
+                    const valorXpeso = Math.round((body.peso * 120) * valorIVA);
+                    resolve(valorXbulto > valorXpeso ? valorXbulto : valorXpeso);
 
+                } else if (body.peso > 100 && body.peso <= 300) {
+                    const valorXpeso = Math.round((body.peso * 100) * valorIVA);
+                    resolve(valorXbulto > valorXpeso ? valorXbulto : valorXpeso);
+
+                } else if (body.peso > 300 && body.peso < 999999) {
+                    const valorXpeso = Math.round((body.peso * 80) * valorIVA);
+                    resolve(valorXbulto > valorXpeso ? valorXbulto : valorXpeso);
+                }
+                // 
+            } else {
+                // 
+                const valorXpallet = Math.round((body.pallet * valorPallet) * valorIVA);
+                resolve(valorXpallet);
+                // 
+            }
+            // 
+        });
+    },
+    cambiarPrecio: function(sql, body) {
+        //
+        const query = `
+            --
+            declare @Error	nvarchar(250) , 
+                    @ErrMsg	nvarchar(2048); 
+            --
+            begin try 
+                if exists ( select * 
+                            from k_paquetes as p with (nolock)
+                            where p.id_paquete = ${ body.id_pqt } ) begin
+                    --
+                    update k_paquetes set valor_cobrado = ${ body.precio }, peso = ${ body.peso }, volumen = ${ body.volumen }
+                    where id_paquete = ${ body.id_pqt };
+                    --
+                    select cast(1 as bit) as resultado,cast(0 as bit) as error, 'Precio actualizado!' as mensaje;
+                    --
+                end
+                else begin
+                    --
+                    select cast(0 as bit) as resultado,cast(1 as bit) as error,'Encomienda no Existe' as mensaje;
+                    --
+                end; 
+            end try
+            begin catch
+                --
+                set @Error = @@ERROR
+                set @ErrMsg = ERROR_MESSAGE();
+                --
+                if (@@TRANCOUNT > 0 ) rollback transaction;
+                --
+                select cast(0 as bit) as resultado,cast(1 as bit) as error,ERROR_MESSAGE() as mensaje;
+            end catch; 
+        `;
+        console.log(query);
+        // --------------------------------------------------------------------------------------------------
+        var request = new sql.Request();
+        //
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+        // 
+    },
 
 };

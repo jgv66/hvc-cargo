@@ -124,9 +124,9 @@ export class OrdenpikPage implements OnInit {
       this.grabando = true;
       //
       this.datos.servicioWEB( '/pickeado', { ficha:    this.datos.ficha,
-                                             problema: data.problema,
-                                             queprobl: data.queprobl,
                                              id_pqt:   item.id_paquete,
+                                             problema: data.problema,
+                                             queprobl: '',
                                              obs:      data.obs,
                                              nroDoc:   data.nroDoc } )
         .subscribe( async (dev: any) => {

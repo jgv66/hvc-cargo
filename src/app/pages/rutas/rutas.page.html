@@ -1,0 +1,89 @@
+<ion-header>
+    <ion-toolbar color="mango">
+        <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Rutas A->B</ion-title>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row style="max-height: 42px;margin-top:10px;">
+            <ion-col size="9" style="max-height: 40px;top:-14px;">
+                <ion-searchbar class="buscar" mode="ios" animated="true" search-icon="x" type="number" name="id" [(ngModel)]="id" showCancelButton="focus" cancelButtonText=" " placeholder="#Encomienda..."></ion-searchbar>
+            </ion-col>
+            <ion-col size="3" style="height: 32px; padding-top: 0px;">
+                <ion-button size="small" expand="block" (click)="aBuscarEncomienda()" style="height:32px;" color="mango">
+                    Buscar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-card styule="margin-top: 10px;margin-bottom: 5px;" *ngIf=" !item ">
+        <img src="assets/images/entrega-003.png" alt="x1">
+    </ion-card>
+
+    <ion-grid fixed *ngIf=" item ">
+        <ion-row>
+            <ion-col size="6">
+                <ion-button class="botonlisto" expand="block" share="round" color="danger" (click)="goTo( 'o' )">
+                    Ir al origen
+                </ion-button>
+            </ion-col>
+            <ion-col size="6">
+                <ion-button class="botonlisto" expand="block" share="round" color="danger" (click)="goTo( 'd' )">
+                    Ir al destino
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-card class="welcome-card" *ngIf=" item ">
+
+        <ion-card-header>
+            <ion-card-title>Origen cargo</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 5px;">
+            <ion-label>
+                <b>
+                  <h2 style="font-weight: bold;"><ion-icon slot="start" name="person-outline"></ion-icon>
+                      {{ item.cli_razon }}
+                  </h2>
+                  <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
+                      {{ item.cli_direccion }}, {{ item.cli_comuna }}, {{ item.cli_ciudad }}
+                  </p>
+                  <p class="verde"><ion-icon slot="start" name="cash-outline"></ion-icon>
+                      {{ item.tipo_pago }} {{ item.desc_pago }}
+                  </p>
+                  <p><ion-icon slot="start" name="call-outline"></ion-icon>
+                      <a href="tel:{{ item.cli_fono1 }}" style="padding-left: 5px;">{{ item.cli_fono1 }}</a>
+                  </p>
+              </b>
+            </ion-label>
+        </ion-card-content>
+    </ion-card>
+    <ion-card class="welcome-card" *ngIf=" item ">
+        <ion-card-header>
+            <ion-card-title>Destino</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="padding-top: 5px;">
+            <ion-label>
+                <b>
+                  <h2><ion-icon slot="start" name="person-outline"></ion-icon>
+                      {{ item.des_razon }}
+                  </h2>
+                  <p class="rojo"><ion-icon slot="start" name="location-outline"></ion-icon>
+                      {{ item.des_direccion }}, {{ item.des_comuna }}, {{ item.des_ciudad }}
+                  </p>
+                  <p><ion-icon slot="start" name="call-outline"></ion-icon>
+                      <a href="tel:{{ item.des_fono1 }}" style="padding-left: 5px;">{{ item.des_fono1 }}</a>
+                  </p>
+              </b>
+            </ion-label>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>
