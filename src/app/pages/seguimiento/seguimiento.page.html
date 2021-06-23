@@ -39,6 +39,8 @@
             <ion-label>
                 <h2 style="font-weight: bold; color: red"><b>{{ item.fecha }}</b> Hora: {{ item.hora }}</h2>
                 <b><p>{{ item.nombre }}: {{ item.comentario }}</p></b>
+                <p *ngIf=" item.comentario === 'Cierre Exitoso' ">Receptor: <b>{{ item.receptor }}</b> </p>
+                <p *ngIf=" item.comentario === 'Cierre Exitoso' && item.rut_receptor !== '' ">Rut: <b>{{ item.rut_receptor }}</b> </p>
             </ion-label>
             <ion-reorder slot="end"></ion-reorder>
         </ion-item>

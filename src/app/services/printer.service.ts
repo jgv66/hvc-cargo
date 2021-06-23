@@ -125,6 +125,14 @@ export class PrintService {
     receipt += commands.EOL + commands.EOL;
     receipt += commands.TEXT_FORMAT.TXT_ITALIC_OFF + commands.EOL + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.TEXT_FORMAT.TXT_NORMAL;
     // hasta aqui grande, ahora normal
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT ;
+    receipt += 'Ingresa a nuestra página web ' + commands.EOL;
+    receipt += commands.TEXT_FORMAT.TXT_BOLD_ON + 'www.hidrovortice.cl' + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += 'Y con tu número de orden ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.id_paquete.toString() + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += 'Sigue online tu encomienda.' + commands.EOL + commands.EOL;
+    receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL; 
+    // --------
+    // hasta aqui grande, ahora normal
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT ;
     receipt += 'Retirador:' + commands.TEXT_FORMAT.TXT_BOLD_ON + this.datos.nombre + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL;
@@ -139,6 +147,7 @@ export class PrintService {
     receipt += 'Peso   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.peso.toString() + 'Kg.' + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += 'Volumen: ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.volumen.toString() + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += 'Fono   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.cli_fono1 + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
+    receipt += '#Doc.  : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.documento_legal +'-'+ item.numero_legal + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL;
     // --------
     receipt += commands.TEXT_FORMAT.TXT_2WIDTH + commands.TEXT_FORMAT.TXT_ALIGN_CT + commands.TEXT_FORMAT.TXT_BOLD_ON;
@@ -157,26 +166,6 @@ export class PrintService {
     receipt += 'Comuna   : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.des_comuna + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += 'Fonos    : ' + commands.TEXT_FORMAT.TXT_BOLD_ON + item.des_fono1  + commands.TEXT_FORMAT.TXT_BOLD_OFF + commands.EOL;
     receipt += commands.HORIZONTAL_LINE.HR3_58MM + commands.EOL + commands.EOL;
-    // code39
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;  // Select justification: Centering
-    // receipt += '\x1d\x68\x50';  // Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
-    // receipt += '\x1d\x48\x02';  // Select print position of HRI characters: Print position, below the barcode
-    // receipt += '\x1d\x66\x01';  // Select font for HRI characters: Font B
-    // receipt += '\x1d\x6b\x04';  // Print barcode: (A) format, barcode system = CODE39
-    // receipt += item.id_paquete.toString();
-    // receipt += '\x00';
-    // receipt += commands.EOL;
-    // receipt += commands.EOL;
-
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;  // Select justification: Centering
-    // receipt += '\x1d\x68\x50';  // Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
-    // receipt += '\x1d\x48\x02';  // Select print position of HRI characters: Print position, below the barcode
-    // receipt += '\x1d\x66\x00';  // Select font for HRI characters: Font B
-    // receipt += '\x1d\x6b\x04';  // Print barcode: (A) format, barcode system = CODE39
-    // receipt += item.id_paquete.toString();
-    // receipt += '\x00';
-    // receipt += commands.EOL;
-    // receipt += commands.EOL;
 
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;  // Select justification: Centering
     receipt += '\x1d\x68\x50';  // Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
@@ -188,126 +177,6 @@ export class PrintService {
     receipt += '\x00';
     receipt += commands.EOL;
     receipt += commands.EOL;
-
-    /*
-    '// --- Print barcode39 --->>>
-    '// Select justification: Centering
-        ESC "a" 1
-        "<< Bonus points : 14 >>"
-    '// Print and feed paper: Paper feeding amount = 4.94 mm (35/180 inches)
-        ESC "J" 35
-    '// Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
-        GS "h" 50
-    '// Select print position of HRI characters: Print position, below the barcode
-        GS "H" 2
-    '// Select font for HRI characters: Font B
-        GS "f" 1
-    '// Print barcode: (A) format, barcode system = CODE39
-        GS "k" 4 "*00014*" 0
-    '// --- Print barcode ---<<<
-    */
-
-    /**
-     * QRCode Assembly into ESC/POS bytes. <p>
-     *
-     * Function 065: Selects the model for QR Code. <p>
-     * ASCII GS ( k pL pH cn 65 n1 n2 <p>
-     *
-     * Function 067: Sets the size of the module for QR Code in dots. <p>
-     * ASCII GS ( k pL pH cn 67 n <p>
-     *
-     * Function 069: Selects the error correction level for QR Code. <p>
-     * ASCII GS ( k pL pH cn 69 n <p>
-     *
-     * Function 080: Store the data in the symbol storage area <p>
-     * ASCII GS ( k pL pH cn 80 m d1...dk <p>
-     *
-     * Function 081: Print the symbol data in the symbol storage area <p>
-     * ASCII GS ( k pL pH cn 81 m <p>
-     *
-     *
-     * @param data to be printed in barcode
-     * @return bytes of ESC/POS commands to print the barcode
-     */
-
-    // QR
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_CT;  // Select justification: Centering
-
-    // receipt += '\x1d\x68\x50';  // Set barcode height: in case TM-T20, 6.25 mm (50/203 inches)
-    // receipt += '\x1d\x48\x02';  // Select print position of HRI characters: Print position, below the barcode
-    // receipt += '\x1d\x66\x01';  // Select font for HRI characters: Font B
-    // receipt += '\x1d\x6b\x04';  // Print barcode: (A) format, barcode system = CODE39
-    // receipt += item.id_paquete.toString();
-    // receipt += '\x00';
-    // receipt += commands.EOL;
-    // receipt += commands.EOL;
-
-    // Function 065
-    // bytes.write(GS);
-    // bytes.write('(');
-    // bytes.write('k');
-    // bytes.write(4); // pL size of bytes
-    // bytes.write(0); // pH size of bytes
-    // bytes.write(49); // cn
-    // bytes.write(65); // fn
-    // bytes.write(model.value); // n1
-    // bytes.write(0); // n2
-    //           GS   (  k    4   0   49  65
-    // receipt += '\x1d\x28\x6b\x04\x00\x49\x65\x01\x00';
-
-    // Function 067
-    // bytes.write(GS);
-    // bytes.write('(');
-    // bytes.write('k');
-    // bytes.write(3); // pL size of bytes
-    // bytes.write(0); // pH size of bytes
-    // bytes.write(49); // cn
-    // bytes.write(67); // fn
-    // bytes.write(size); // n
-    //           GS  (   k   3   0    49  67  3
-    // receipt += '\x1d\x28\x6b\x03\x00\x49\x67\x03';
-
-    // Function 069
-    // bytes.write(GS);
-    // bytes.write('(');
-    // bytes.write('k');
-    // bytes.write(3); // pL size of bytes
-    // bytes.write(0); // pH size of bytes
-    // bytes.write(49); // cn
-    // bytes.write(69); // fn
-    // bytes.write(errorCorrectionLevel.value); // n
-    //           GS  (   k   3   0    49  69  15
-    // receipt += '\x1d\x28\x6b\x03\x00\x49\x69\x15';
-
-    // Function 080
-    // int numberOfBytes = data.length() + 3;
-    // int pL = numberOfBytes & 0xFF;
-    // int pH = (numberOfBytes & 0xFF00) >> 8 ;
-    // const numberOfBytes = item.id_paquete.toString().length + 3;
-    // const pL = numberOfBytes & 0xFF;
-    // const pH = (numberOfBytes & 0xFF00) >> 8 ;
-
-    // bytes.write(GS);
-    // bytes.write('(');
-    // bytes.write('k');
-    // bytes.write(pL); // pL size of bytes
-    // bytes.write(pH); // pH size of bytes
-    // bytes.write(49); // cn
-    // bytes.write(80); // fn
-    // bytes.write(48); // m
-    // bytes.write(data.getBytes(),0,data.length());
-    //           GS  (   k   3   0    49  67  3
-    // receipt += '\x1d\x28\x6b\x03\x00\x49\x67\x03';
-
-    // Function 081
-    // bytes.write(GS);
-    // bytes.write('(');
-    // bytes.write('k');
-    // bytes.write(3); // pL size of bytes
-    // bytes.write(0); // pH size of bytes
-    // bytes.write(49); // cn
-    // bytes.write(81); // fn
-    // bytes.write(48); // m
 
     return receipt;
 
