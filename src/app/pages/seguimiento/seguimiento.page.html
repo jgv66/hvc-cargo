@@ -7,12 +7,17 @@
     </ion-toolbar>
     <ion-grid>
         <ion-row style="max-height: 42px;margin-top:10px;">
-            <ion-col size="9" style="max-height: 40px;top:-14px;">
-                <ion-searchbar class="buscar" mode="ios" animated="true" search-icon="x" type="number" name="id" [(ngModel)]="id" showCancelButton="focus" cancelButtonText=" " placeholder="Nro. de la encomienda..."></ion-searchbar>
+            <ion-col size="7" style="max-height: 40px;top:-14px;">
+                <ion-searchbar class="buscar" mode="ios" animated="true" search-icon="x" type="number" name="id" [(ngModel)]="id" showCancelButton="focus" cancelButtonText=" " placeholder="#Encomienda..."></ion-searchbar>
             </ion-col>
             <ion-col size="3" style="height: 32px; padding-top: 0px;">
                 <ion-button size="small" expand="block" (click)="aBuscarEncomienda()" style="height:32px;" color="mango">
                     Buscar
+                </ion-button>
+            </ion-col>
+            <ion-col size="2" *ngIf=" itemes.length>0 " style="height: 32px; padding-top: 0px;">
+                <ion-button (click)="ImprimeEncomienda(itemes[0])" size="small" expand="block" style="height:32px;" color="mango">
+                    <ion-icon slot="icon-only" name="print-outline"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -35,12 +40,13 @@
         <ion-list-header mode="ios">
             <ion-label>Seguimiento de encomienda</ion-label>
         </ion-list-header>
+
         <ion-item *ngFor="let item of itemes" detail (click)="revisaFoto()">
             <ion-label>
                 <h2 style="font-weight: bold; color: red"><b>{{ item.fecha }}</b> Hora: {{ item.hora }}</h2>
-                <b><p>{{ item.nombre }}: {{ item.comentario }}</p></b>
-                <p *ngIf=" item.comentario === 'Cierre Exitoso' ">Receptor: <b>{{ item.receptor }}</b> </p>
-                <p *ngIf=" item.comentario === 'Cierre Exitoso' && item.rut_receptor !== '' ">Rut: <b>{{ item.rut_receptor }}</b> </p>
+                <p><b>{{ item.nombre }}: {{ item.comentario }}</b></p>
+                <p *ngIf=" item.receptor "><b>Receptor: {{ item.receptor }}</b></p>
+                <p *ngIf=" item.receptor && item.rut_receptor "><b>Rut: {{ item.rut_receptor }}</b></p>
             </ion-label>
             <ion-reorder slot="end"></ion-reorder>
         </ion-item>

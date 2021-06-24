@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="ion-no-border">
     <ion-toolbar color="mango">
         <ion-buttons slot="start">
             <ion-button (click)="salir()">
@@ -12,18 +12,17 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
-</ion-header>
-
-<ion-content class="animated fadeIn">
-
     <ion-segment color="tertiary" mode="ios" (ionChange)="segmentChanged($event)">
         <ion-segment-button value="retiroOK">
             <ion-label>Todo OK</ion-label>
         </ion-segment-button>
         <ion-segment-button value="retiroBAD">
-            <ion-label>Problemas</ion-label>
+            <ion-label>Recalcular envío</ion-label>
         </ion-segment-button>
     </ion-segment>
+</ion-header>
+
+<ion-content class="animated fadeIn">
 
     <ion-list *ngIf=" segmento === 'retiroOK' " class="animated fadeIn" lines="none" style="margin-top:5px;">
 
@@ -73,10 +72,6 @@
                 <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
             </ion-button>
         </ion-card>
-        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 25px;">
-            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
-            la encomienda de pendiente a 'Acopios'.
-        </p>
         <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
             <ion-col size="4">
                 <ion-button expand="block" size="small" share="round" color="" (click)="salir()">
@@ -89,48 +84,159 @@
                 </ion-button>
             </ion-col>
         </ion-row>
+        <p style="margin-left: 20px; margin-right: 20px; font-size: 75%;text-align: justify; margin-top: 15px;">
+            Debe validar que todos los datos entregados son correctos marcando cada una de las opciones. También puede ingresar una observación o comentario. Una vez que haya marcado todos los ítemes, si corresponde, pulse 'Retirar encomienda'. Esta opción moverá
+            la encomienda de pendiente a 'Acopios'.
+        </p>
     </ion-list>
 
     <ion-list *ngIf=" segmento === 'retiroBAD' " class="animated fadeIn" lines="none" style="margin-top:5px;">
-        <ion-list-header style="margin-top:5px; margin-bottom:10px">
-            <ion-label>
-                <b>
-                <h1 class="rojo ion-text-center">Problemas con el retiro</h1>
-                </b>
-            </ion-label>
-        </ion-list-header>
-        <ion-radio-group name="queprobl" [(ngModel)]="queprobl" value="310">
-            <ion-item>
-                <ion-radio slot="start" value="310"></ion-radio>
-                <ion-label>Dirección incorrecta</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-radio slot="start" value="320"></ion-radio>
-                <ion-label>Cliente no encontrado</ion-label>
-            </ion-item>
-            <ion-item>
-                <ion-radio slot="start" value="330"></ion-radio>
-                <ion-label>Sin dinero para envío (${{ item.valor_cobrado | number:"1.0-0" }}.-)</ion-label>
-            </ion-item>
-        </ion-radio-group>
-        <ion-item>
-            <ion-label position="stacked">Observaciones al problema</ion-label>
-            <ion-textarea rows="3" placeholder="Sus comentarios aquí..." name="obsProblema" [(ngModel)]="obsProblema"></ion-textarea>
-        </ion-item>
-        <ion-card *ngIf=" foto " style="margin-top: 20px;">
-            <ion-img [src]="foto" alt="imágenes rescatadas" class="picker"></ion-img>
-            <ion-button fill="clear" expand="block" (click)="eliminarFoto()" style="margin-top: -72px;">
-                <ion-icon color="light" slot="end" name="trash-outline" size="large"></ion-icon>
-            </ion-button>
+
+        <ion-card class="maximo90">
+            <ion-card-header style="padding-bottom: 0px;">
+                <ion-card-title>
+                    <ion-label>
+                        <h1 class="rojo ion-text-center">Recalcular el valor cobrado</h1>
+                    </ion-label>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-segment class="subsegment" #subsegment value="bulto" color="tertiary" mode="ios" (ionChange)="segmentChangedTipo($event)">
+                    <ion-segment-button value="bulto">
+                        <ion-label>Por Bulto/Peso</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="pallet">
+                        <ion-label>Por Pallet</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+                <ion-list *ngIf=" queTipo === 'bulto' " class="animated fadeIn" lines="none" style="margin-top:5px;">
+                    <ion-row class="altofila">
+                        <ion-col size="7">
+                            <ion-item>
+                                <ion-label>Cantidad de bultos</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-item>
+                                <ion-input type="number" name="cantidad" [(ngModel)]="cantidad" required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila">
+                        <ion-col size="7">
+                            <ion-item>
+                                <ion-label>Alto (cms)</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-item>
+                                <ion-input type="number" name="alto" [(ngModel)]="alto" required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila">
+                        <ion-col size="7">
+                            <ion-item>
+                                <ion-label>Ancho (cms)</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-item>
+                                <ion-input type="number" name="ancho" [(ngModel)]="ancho" required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila">
+                        <ion-col size="7">
+                            <ion-item>
+                                <ion-label>Largo (cms)</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-item>
+                                <ion-input type="number" name="largo" [(ngModel)]="largo" required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila">
+                        <ion-col size="7">
+                            <ion-item>
+                                <ion-label>Peso total (Kg)</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-item>
+                                <ion-input type="number" name="peso" [(ngModel)]="peso" required></ion-input>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila" style="font-size:80%;margin-top:25px;margin-bottom:15px;padding-left:20px;padding-right:20px">
+                        <ion-col size="12">
+                            <ion-button expand="block" size="small" share="round" color="mango" (click)="solicitarCalculo()">
+                                <ion-icon slot="start" name="cube-outline"></ion-icon>
+                                Recalcular con estos datos
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf=" precio > 0 ">
+                        <ion-col size="12">
+                            <ion-label>
+                                <h1 class="rojo ion-text-center">Precio $ {{ precio | number:"1.0-0" }}.-</h1>
+                            </ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="altofila" *ngIf=" precio > 0 " style="font-size:80%;margin-top:15px;margin-bottom:15px;padding-left:20px;padding-right:20px">
+                        <ion-col size="12">
+                            <ion-button expand="block" size="small" share="round" color="danger" (click)="cambiarPrecio()">
+                                Actualizar precio en el sistema
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-list>
+                <!--  -->
+                <ion-list *ngIf=" queTipo === 'pallet' " class="animated fadeIn" lines="none" style="margin-top:5px;">
+                    <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
+                        <ion-row class="altofila">
+                            <ion-col size="6">
+                                <ion-item>
+                                    <ion-label>Pallets </ion-label>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="6">
+                                <ion-item>
+                                    <ion-input type="number" name="pallet" [(ngModel)]="pallet" required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <p class="ion-text-center" style="margin-top:5px;">( Se permiten fracciones. Ej: 1.5 ó 0.75 )</p>
+                        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:15px;padding-left:20px;padding-right:20px">
+                            <ion-col size="12">
+                                <ion-button expand="block" size="small" share="round" color="mango" (click)="solicitarCalculo()">
+                                    <ion-icon slot="start" name="cube-outline"></ion-icon>
+                                    Enviar datos para recálculo
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-spinner *ngIf=" calculando "></ion-spinner>
+                        <ion-row *ngIf=" precio > 0 ">
+                            <ion-col size="12">
+                                <ion-label>
+                                    <h1 class="rojo ion-text-center">Precio $ {{ precio | number:"1.0-0" }}.-</h1>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf=" precio > 0 " style="font-size:80%;margin-top:15px;margin-bottom:15px;padding-left:20px;padding-right:20px">
+                            <ion-col size="12">
+                                <ion-button expand="block" size="small" share="round" color="danger" (click)="cambiarPrecio()">
+                                    Actualizar precio en el sistema
+                                </ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-row>
+                    <ion-spinner *ngIf=" calculando "></ion-spinner>
+                </ion-list>
+            </ion-card-content>
         </ion-card>
-        <ion-row style="font-size:80%;margin-top:25px;margin-bottom:45px;padding-left:20px;padding-right:20px">
-            <ion-col size="12">
-                <ion-button expand="block" size="small" share="round" color="danger" (click)="problemas()">
-                    <ion-icon slot="start" name="rainy-outline"></ion-icon>
-                    Guardar los problemas del retiro
-                </ion-button>
-            </ion-col>
-        </ion-row>
 
     </ion-list>
 

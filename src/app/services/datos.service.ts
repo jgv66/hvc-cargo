@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ToastController } from '@ionic/angular';
 import { Plugins, CameraResultType, CameraSource, CameraOptions } from '@capacitor/core';
 //
 const { Camera } = Plugins;
@@ -20,7 +21,8 @@ export class DatosService {
   xfoto;
   logeado = false;
 
-  constructor( private http: HttpClient ) {
+  constructor( private http: HttpClient,
+               private toastCtrl: ToastController ) {
     this.logeado = false;
   }
 
@@ -76,9 +78,16 @@ export class DatosService {
       const imageName = item.id_paquete + alias +'.'+ image.format ;
       //
       this.uploadImageBlob( blobData, imageName, image.format, item.id_paquete )
-      .subscribe((newImage) => {
-        console.log(newImage);
-      });
+        .subscribe( async (newImage:any) => {
+          // console.log('addImage()->',newImage);
+          const toast = await this.toastCtrl.create({
+            message: newImage.mensaje,
+            duration: 2000,
+            position: 'middle'
+          });
+          toast.present();
+          // 
+        });
     }
   }
  

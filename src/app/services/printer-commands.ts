@@ -172,17 +172,3 @@ export const commands = {
 // '// Print barcode: (A) format, barcode system = CODE39
 //     GS "k" 4 "*00014*" 0
 // '// --- Print barcode ---<<<
-
-// var data = "https://github.com/CesarBalzer/Cordova-Plugin-BTPrinter";
-// var align = 1; /* 0, 1, 2 */
-// var model = 49; /* https://reference.epson-biz.com/modules/ref_escpos/index.php?content_id=140 */
-// var size = 32; /* https://reference.epson-biz.com/modules/ref_escpos/index.php?content_id=141 */
-// var eclevel = 50; /* https://reference.epson-biz.com/modules/ref_escpos/index.php?content_id=142 */
-// BTPrinter.printQRCode(function(data){
-//     console.log("Success");
-//     console.log(data);
-// },function(err){
-//     console.log("Error");
-//     console.log(err);
-// }, data, align, model, size, eclevel); 
-

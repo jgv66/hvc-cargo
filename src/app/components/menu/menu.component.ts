@@ -37,8 +37,9 @@ export class MenuComponent implements OnInit {
     {
       title: 'Consultas',
       children: [
-        { title: 'Seguimiento', url: '/seguimiento',  icon: 'earth-outline'  },
-        { title: 'Fotos',       url: '/carrete',      icon: 'camera-outline' },
+        { title: 'Seguimiento',    url: '/seguimiento',  icon: 'earth-outline'  },
+        { title: 'Fotos',          url: '/carrete',      icon: 'camera-outline' },
+        // { title: 'Ruta a destino', url: '/rutas',        icon: 'map-outline'    },
       ]
     },
 

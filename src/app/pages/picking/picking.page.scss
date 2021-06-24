@@ -12,6 +12,8 @@ ion-checkbox {
 
 ion-segment {
     margin-top: 20px;
+    margin-left: 5%;
+    max-width: 90%;
 }
 
 .fotocard {
@@ -27,4 +29,23 @@ ion-segment {
     display: block !important;
     justify-content: center;
     align-items: center;
+}
+
+.box {
+    border-radius: 8px;
+    border: solid 1px;
+}
+
+.maximo90 {
+    margin-left: 5%;
+    max-width: 90%;
+}
+
+.subsegment {
+    margin-left: 15%;
+    max-width: 70%;
+}
+
+.altofila {
+    max-height: 46px;
 }
