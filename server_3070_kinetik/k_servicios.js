@@ -1641,7 +1641,7 @@ module.exports = {
         return new Promise((resolve) => {
             // 
             const unMillon = 1000000;
-            const minimo = 4000;
+            const minimo = 5500;
             const valorPallet = 60000;
             const valorIVA = 1.0;
             // 
@@ -1649,7 +1649,7 @@ module.exports = {
                 console.log('bulto');
                 // 
                 const mt3 = (body.alto * body.ancho * body.largo) / unMillon;
-                let valorXbulto = body.cantidad * (mt3 * 165 * 380);
+                let valorXbulto = body.cantidad * (mt3 * 226.2 * 380);
                 valorXbulto = Math.round(((valorXbulto < minimo) ? minimo : valorXbulto) * valorIVA);
                 // 
                 if (body.peso <= 100) {
