@@ -40,6 +40,7 @@ export class VerfotosPage implements OnInit {
   cargaFotos() {
     this.cargando = true;
     const IMG_URL = this.datos.url + '/public/img/' ;
+    const ATT_URL = this.datos.url + '/public/attach/' ;
     //
     this.datos.servicioWEB( '/getimages', { id_pqt: this.id_pqt } )
         .subscribe( (dev: any) => {
@@ -47,7 +48,13 @@ export class VerfotosPage implements OnInit {
           if ( dev.datos[0].resultado === 'ok' ) {
             //
             dev.datos.forEach( element => { 
-              element.imgb64 = IMG_URL + element.imgb64; 
+              //              
+              if ( element.attach === true ) {
+                element.imgb64 = ATT_URL + element.attach_name;
+              } else {
+                element.imgb64 = IMG_URL + element.imgb64;
+              }
+              //
             });
             //
             this.fotos = dev.datos;

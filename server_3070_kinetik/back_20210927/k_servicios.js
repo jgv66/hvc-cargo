@@ -437,9 +437,6 @@ module.exports = {
                 select 'ok' as resultado, img_name as imgb64
                         ,convert(nvarchar(10), fechains, 103) as fecha
                         ,convert(nvarchar(5), fechains, 108) as hora 
-                        ,cast( (case when charindex( CAST( id_paquete as varchar(30) )+'_attach_', img_name )>0 then 1 else 0 end) as bit) as attach
-                        ,img_exten
-                        ,REPLACE( img_name, CAST( id_paquete as varchar(30) )+'_attach_', '' ) as attach_name
                 from k_paquetes_img with (nolock) 
                 where id_paquete = ${ body.id_pqt };
             end

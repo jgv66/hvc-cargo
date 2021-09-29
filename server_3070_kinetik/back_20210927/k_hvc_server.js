@@ -28,10 +28,6 @@ app.use("/public", express.static('public'));
 publicpath = path.resolve(__dirname, 'public');
 app.use('/static', express.static(publicpath));
 CARPETA_IMG = publicpath + '/img/';
-CARPETA_ATT = publicpath + '/attach/';
-
-const upload = multer({ dest: CARPETA_IMG });
-const attach = multer({ dest: CARPETA_ATT });
 
 // body parser
 app.use(bodyParser.json({ limit: '5mb', extended: true }));
@@ -649,75 +645,38 @@ app.post('/cambiaprecio',
     });
 
 //---------------------------------- multer funcionó
-app.post('/imgUp',
-    upload.single('kfoto'), async(req, res, next) => {
-        console.log('req.file->', req.file);
-        console.log('req.body->', req.body);
+const upload = multer({ dest: CARPETA_IMG });
+app.post('/imgUp', upload.single('kfoto'), async(req, res, next) => {
+    console.log('req.file->', req.file);
+    console.log('req.body->', req.body);
+    try {
+        //
+        const newPath = req.file.destination + req.file.originalname;
+        const oldPath = req.file.path;
         try {
-            //
-            const newPath = req.file.destination + req.file.originalname;
-            const oldPath = req.file.path;
-            try {
-                // borrar antes de grabar
-                if (fileExist.sync(newPath)) {
-                    fs.unlinkSync(newPath);
-                }
-                //file removed
-            } catch (err) {
-                console.error(err);
+            // borrar antes de grabar
+            if (fileExist.sync(newPath)) {
+                fs.unlinkSync(newPath);
             }
-            fs.renameSync(oldPath, newPath);
-            // 
-            servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.id_pqt)
-                .then(() => {
-                    return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
-                })
-                .catch(function(error) {
-                    res.status(500).json({ resultado: 'error', datos: error });
-
-                });
-            //
-        } catch (e) {
-            next(e);
+            //file removed
+        } catch (err) {
+            console.error(err);
         }
-    });
-app.post('/attachFile',
-    attach.single('kfoto'),
-    async(req, res, next) => {
-        console.log('req.file->', req.file);
-        console.log('req.body->', req.body);
-        try {
-            //
-            const newPath = req.file.destination + req.file.originalname;
-            const oldPath = req.file.path;
-            // console.log('newPath->', newPath);
-            // console.log('oldPath->', oldPath);
-            //
-            try {
-                // borrar antes de grabar
-                if (fileExist.sync(newPath)) {
-                    fs.unlinkSync(newPath);
-                }
-                //file removed
-            } catch (err) {
-                console.error(err);
-            }
-            fs.renameSync(oldPath, newPath);
-            // 
-            servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.id_pqt)
-                .then(() => {
-                    return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
-                })
-                .catch(function(error) {
-                    res.status(500).json({ resultado: 'error', datos: error });
+        fs.renameSync(oldPath, newPath);
+        // 
+        servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.id_pqt)
+            .then(() => {
+                return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
+            })
+            .catch(function(error) {
+                res.status(500).json({ resultado: 'error', datos: error });
 
-                });
-            //
-        } catch (e) {
-            next(e);
-        }
-    });
-
+            });
+        //
+    } catch (e) {
+        next(e);
+    }
+});
 //---------------------------------- multer funcionó
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

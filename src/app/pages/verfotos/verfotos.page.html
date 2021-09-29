@@ -25,7 +25,8 @@
     <ion-list lines="none">
         <ion-item *ngFor="let foto of fotos">
             <ion-card style="margin-top: 20px;" mode="ios">
-                <img [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <img *ngIf=" foto.attach === false  " [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <a *ngIf=" foto.attach === true  " [href]="foto.imgb64" target="_blank">{{ foto.attach_name }}</a>
                 <ion-label>Fecha: {{ foto.fecha }} Hora: {{ foto.hora }}</ion-label>
             </ion-card>
         </ion-item>
